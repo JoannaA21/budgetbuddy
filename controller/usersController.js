@@ -1,7 +1,10 @@
 const Profile = require('../models/users');
 const { Sequelize } = require('sequelize');
 
-//CREATE A NEW USER
+const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
+
+//CREATE A NEW USER (post)
 const createUser = async(req, res, next) => {
     const {fname, lname, email, password} = req.body; //user input (post)
 
@@ -24,7 +27,7 @@ const createUser = async(req, res, next) => {
 };
 
 
-// Get all users
+// Get all users (get)
 const getAllUsers = async (req, res, next) => {
     try {
       const users = await Profile.findAll();
@@ -34,7 +37,7 @@ const getAllUsers = async (req, res, next) => {
     }
   };
   
-  // Get user by ID
+  // Get user by ID (get)
   const getUserById = async (req, res, next) => {
     const { id } = req.params;
     try {

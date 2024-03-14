@@ -2,11 +2,16 @@ const Expense = require('../models/expense');
 const { Sequelize } = require('sequelize');
 
 
-// Create expense
+const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
+
+// Create expense (post)
 const createExpense = async(req, res, next) => {
     const {expense_type, cost, user_id} = req.body;
 
     try {
+        created_at = today.toISOString();
+        updated_at = today.toISOString();
 
         const expense = await Expense.create({
             expense_type, 
@@ -22,7 +27,7 @@ const createExpense = async(req, res, next) => {
 };
 
 
-//Get goal for specific user
+//Get goal for specific user (get)
 const getExpense_ByUserId = async(req, res, next) => {
     const {id} = req.params;
 

@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('budgetbuddy.db');
 
 db.run(`
-    CREATE TABLE IF NOT EXISTS profile (
+    CREATE TABLE IF NOT EXISTS Profile (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fname TEXT NOT NULL,
         lname TEXT NOT NULL,
@@ -20,7 +20,7 @@ db.run(`
 });
 
 db.run(`
-    CREATE TABLE IF NOT EXISTS goal (
+    CREATE TABLE IF NOT EXISTS Goal (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         monthly_income DECIMAL(10,2) NOT NULL DEFAULT 0,
         monthly_saving_goal DECIMAL(10,2) NOT NULL DEFAULT 0,
@@ -38,7 +38,7 @@ db.run(`
 
 
 db.run(`
-CREATE TABLE IF NOT EXISTS expenses (
+CREATE TABLE IF NOT EXISTS Expenses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     expense_type TEXT NOT NULL,
     cost DECIMAL(10,2) NOT NULL DEFAULT 0,

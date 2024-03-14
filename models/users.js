@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const sequelize = dbConfig.connect();
 
 const Profile = sequelize.define(
-    'profile',
+    'Profile',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -27,22 +27,22 @@ const Profile = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
-            validate: {
-                isEmail: true, 
-                isUniqueEmail: async(value) => {
-                    const existingUser = await Student_user.findOne({where: {email:value}});
-                    if(existingUser){
-                        throw new Error ('Email already exists in the database.')
-                    }
-                }
-            }
+            // validate: {
+            //     isEmail: true, 
+            //     isUniqueEmail: async(value) => {
+            //         const existingUser = await Profile.findOne({where: {email:value}});
+            //         if(existingUser){
+            //             throw new Error ('Email already exists in the database.')
+            //         }
+            //     }
+            // }
         }, password: {
             type: DataTypes.STRING,
             allowNull: false
         }
     },
         {
-            tableName: 'Student_user',
+            tableName: 'Profile',
             timestamps: false,
             hooks: {
                 beforeCreate: async(user) => {

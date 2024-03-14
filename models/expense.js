@@ -5,7 +5,7 @@ const sequelize = dbConfig.connect();
 
 
 const Expense = sequelize.define (
-    'expenses',
+    'Expense',
     {
         id: {
             type: DataTypes.INTEGER,

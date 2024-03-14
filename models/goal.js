@@ -4,7 +4,7 @@ const dbConfig = require('../config/dbConfig');
 const sequelize = dbConfig.connect();
 
 const Goal = sequelize.define(
-    'goal',
+    'Goal',
     {
         id: {
             type: DataTypes.INTEGER,
