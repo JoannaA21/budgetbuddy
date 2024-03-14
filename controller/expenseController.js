@@ -16,7 +16,9 @@ const createExpense = async(req, res, next) => {
         const expense = await Expense.create({
             expense_type, 
             cost, 
-            user_id
+            user_id,
+            created_at,
+            updated_at
         });
 
         res.status(201).json(expense);

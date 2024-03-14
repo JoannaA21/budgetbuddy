@@ -21,11 +21,23 @@ const Goal = sequelize.define(
             allowNull: false,
             defaultValue: 0
         },
-        expense_type: {
+        goal_type: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        created_at: {
+            type: DataTypes.STRING,
+            allowNull: false
+          },
+          updated_at: {
+            type: DataTypes.STRING,
+            allowNull: false
+          }
+    }, 
+        {
+            tableName: 'Goal',
+            timestamps: false
         }
-    }
 )
 
 

@@ -16,7 +16,9 @@ const createUser = async(req, res, next) => {
             fname,
             lname,
             email,
-            password
+            password,
+            created_at,
+            updated_at
         });
 
         res.status(201).json(profile);

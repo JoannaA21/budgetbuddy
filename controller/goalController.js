@@ -6,7 +6,7 @@ const today = new Date(timeElapsed);
 
 // Create goal (post)
 const createGoal = async(req, res, next) => {
-    const {user_id, monthly_income, monthly_saving_goal, expense_type} = req.body;
+    const {user_id, monthly_income, monthly_saving_goal, goal_type} = req.body;
 
     try {
 
@@ -17,7 +17,9 @@ const createGoal = async(req, res, next) => {
             user_id,
             monthly_income,
             monthly_saving_goal,
-            expense_type
+            goal_type,
+            created_at,
+            updated_at
         });
 
         res.status(201).json(goal);

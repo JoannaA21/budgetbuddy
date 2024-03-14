@@ -24,9 +24,11 @@ db.run(`
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         monthly_income DECIMAL(10,2) NOT NULL DEFAULT 0,
         monthly_saving_goal DECIMAL(10,2) NOT NULL DEFAULT 0,
-        expense_type TEXT NOT NULL,
+        goal_type TEXT NOT NULL,
         user_id INTERGER,
-        FOREIGN KEY(user_id) REFERENCES profile(id)
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY(user_id) REFERENCES Profile(id)
     )
 `, (err) => {
     if(err) {
@@ -43,7 +45,9 @@ CREATE TABLE IF NOT EXISTS Expenses (
     expense_type TEXT NOT NULL,
     cost DECIMAL(10,2) NOT NULL DEFAULT 0,
     user_id INTERGER,
-    FOREIGN KEY(user_id) REFERENCES profile(id)
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES Profile(id)
 )` ,(err) => {
     if(err) {
         console.error('Error creating the expense table:', err.message)
