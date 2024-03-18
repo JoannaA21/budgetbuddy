@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout4"
-        android:layout_width="392dp"
+        android:layout_width="0dp"
         android:layout_height="157dp"
         android:gravity="center|top"
         android:orientation="vertical"
@@ -52,12 +52,15 @@
 
     <LinearLayout
         android:id="@+id/linearLayout5"
-        android:layout_width="405dp"
+        android:layout_width="0dp"
         android:layout_height="100dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+        app:layout_constraintVertical_bias="1.0">
 
         <Button
             android:id="@+id/button4"
@@ -110,8 +113,9 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="414dp"
-        android:layout_height="0dp"
+        android:id="@+id/linearLayout9"
+        android:layout_width="0dp"
+        android:layout_height="540dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
@@ -145,7 +149,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:layout_width="404dp"
+            android:layout_width="match_parent"
             android:layout_height="406dp"
             android:layout_margin="5dp"
             android:orientation="vertical">
