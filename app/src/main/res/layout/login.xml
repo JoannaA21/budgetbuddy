@@ -52,6 +52,7 @@
             android:padding="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email" />
@@ -64,6 +65,7 @@
             android:padding="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="hint" />
@@ -74,7 +76,7 @@
             android:layout_width="115dp"
             android:layout_height="wrap_content"
             android:backgroundTint="#068579"
-            android:onClick="login"
+            android:onClick="loginbtn"
             android:padding="10dp"
             android:text="Login"
             android:textSize="20sp"
@@ -85,6 +87,7 @@
             android:id="@+id/tv_createAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="CreateAccount"
             android:padding="20dp"
             android:text="Create an account"
             android:textAlignment="center"

@@ -194,6 +194,7 @@
             android:layout_weight="1"
             android:backgroundTint="#068579"
             android:drawableTop="@drawable/goal"
+            android:onClick="GoalPage"
             android:padding="5dp"
             android:text="Goal"
             app:cornerRadius="0dp" />
