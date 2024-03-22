@@ -42,19 +42,18 @@ const login = async (req, res, next) => {
     // Generate and send the JWT token on successful login
     const token = jwt.sign({
       userId: user.id,
-      userOrEmail: username,
+      email: user.email,
       fname: user.fname,
       lname: user.lname
     }, SECRET_KEY, {
       expiresIn: '1h'
     });
+
     const details = {
-      details: {
-        id: user.id,
-        fname: user.fname,
-        lname: user.lname,
-        email: user.email,
-      },
+      id: user.id,
+      fname: user.fname,
+      lname: user.lname,
+      email: user.email,
       token: token
     };
     res.json({

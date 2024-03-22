@@ -3,6 +3,13 @@ const router = express.Router();
 const expenseController = require('../controller/expenseController');
 const goalController = require('../controller/goalController');
 const userController = require('../controller/usersController');
+const { login, logout } = require('../controller/loginController');
+
+
+
+// Route for user login
+router.post('/login', login);
+router.get('/logout', logout);
 
 //Route for createUser
 router.post('/createuser', userController.createUser);
