@@ -87,20 +87,19 @@
         app:layout_constraintVertical_bias="1.0">
 
         <Button
-            android:id="@+id/button19"
+            android:id="@+id/goalPage"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="3dp"
             android:layout_weight="1"
             android:backgroundTint="#068579"
             android:drawableTop="@drawable/goal"
-            android:onClick="GoalPage"
             android:padding="5dp"
             android:text="Goal"
             app:cornerRadius="0dp" />
 
         <Button
-            android:id="@+id/button20"
+            android:id="@+id/dashboardPage"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="3dp"
@@ -112,7 +111,7 @@
             app:cornerRadius="0dp" />
 
         <Button
-            android:id="@+id/button21"
+            android:id="@+id/expensePage"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="3dp"
@@ -124,7 +123,7 @@
             app:cornerRadius="0dp" />
 
         <Button
-            android:id="@+id/button22"
+            android:id="@+id/profilePage"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="3dp"

@@ -12,11 +12,14 @@ public class expensePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_expense_income);
 
+        // Call the method from IntentUtils to set up click listeners for navigation buttons
+        IntentUtils.setNavigationButtonClickListeners(this);
+
 
     }
 
-    public void GoalPage(View view) {
-        Intent intent = new Intent(this, goalPage.class);
+    public void ExpensePage(View view) {
+        Intent intent = new Intent(this, expensePage.class);
         startActivity(intent);
     }
 }
