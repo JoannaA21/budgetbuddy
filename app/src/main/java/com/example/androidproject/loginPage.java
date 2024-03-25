@@ -45,14 +45,14 @@ public class loginPage extends AppCompatActivity {
         editTextPassword = findViewById(R.id.password);
 
         Button loginButton = findViewById(R.id.loginButton);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Execute the PostRequestAsyncTask when the button is clicked
-                new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
-            }
-        });
-
+//        loginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Execute the PostRequestAsyncTask when the button is clicked
+//                new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
+//            }
+//        });
+        redirectWhenSuccessfulLogin();
     }
 
 
@@ -158,7 +158,7 @@ public class loginPage extends AppCompatActivity {
 
 
     public void redirectWhenSuccessfulLogin() {
-        Intent intent = new Intent(this, profilePage.class);     //Change this to dashboard
+        Intent intent = new Intent(this, dashboardPage.class);     //Change this to dashboard
         startActivity(intent);
     }
     public void CreateAccount(View view) {

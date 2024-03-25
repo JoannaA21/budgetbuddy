@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".dashboard_Fragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="January"
+                android:textAlignment="center"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/imageView9"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="190dp"-->
+            <!--                android:src="@drawable/handshake" />-->
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
+
+            <!--            <com.anychart.AnyChartView-->
+            <!--                android:id="@+id/chart"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="400dp"/>-->
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="monospace"
+                android:padding="5dp"
+                android:text="You are on track on achieving  your monthly savings"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#26A276"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="18dp"
+                android:paddingBottom="30dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="#239B90"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Rent"
+                        android:textAlignment="textStart"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:paddingStart="10dp"
+                        android:text="750"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        android:textStyle="bold|italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="#239B90"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Grocery"
+                        android:textAlignment="textStart"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:paddingStart="10dp"
+                        android:text="300"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        android:textStyle="bold|italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="#239B90"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Car"
+                        android:textAlignment="textStart"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:paddingStart="10dp"
+                        android:text="290"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        android:textStyle="bold|italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="#239B90"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Travel"
+                        android:textAlignment="textStart"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:paddingStart="10dp"
+                        android:text="100"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        android:textStyle="bold|italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="#239B90"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Savings"
+                        android:textAlignment="textStart"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView23"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:paddingStart="10dp"
+                        android:text="600"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        android:textStyle="bold|italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="#239B90"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Phone"
+                        android:textAlignment="textStart"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView25"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:paddingStart="10dp"
+                        android:text="45"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        android:textStyle="bold|italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView26"
+                        android:layout_width="180dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="#239B90"
+                        android:paddingStart="10dp"
+                        android:paddingTop="5dp"
+                        android:text="Misc."
+                        android:textAlignment="textStart"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView27"
+                        android:layout_width="175dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:paddingStart="10dp"
+                        android:text="150"
+                        android:textAlignment="viewStart"
+                        android:textSize="22sp"
+                        android:textStyle="bold|italic" />
+                </TableRow>
+
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
