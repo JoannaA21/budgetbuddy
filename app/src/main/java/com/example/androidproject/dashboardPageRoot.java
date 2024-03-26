@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.androidproject.databinding.DashboardBinding;
 
-public class dashboardPage  extends AppCompatActivity {
+public class dashboardPageRoot extends AppCompatActivity {
 
     DashboardBinding binding;
 
