@@ -25,6 +25,10 @@ const Goal = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         created_at: {
             type: DataTypes.STRING,
             allowNull: false

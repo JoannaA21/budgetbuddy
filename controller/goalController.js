@@ -35,7 +35,13 @@ const getGoal_ByUserId = async(req, res, next) => {
     const {id} = req.params;
 
     try{
-        const userGoal = await Goal.findAll({'user_id': id});
+        // const userGoal = await Goal.findAll({'user_id': id});
+        const userGoal = await Goal.findOne({
+            where: {
+              user_id: id,
+            },
+            order: [['createdAt', 'DESC']],
+          });
         res.status(200).json(userGoal);
     }catch  (err) {
         next(err);
