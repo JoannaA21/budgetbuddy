@@ -40,7 +40,7 @@ const getGoal_ByUserId = async(req, res, next) => {
             where: {
               user_id: id,
             },
-            order: [['createdAt', 'DESC']],
+            order: [['created_at', 'DESC']],
           });
         res.status(200).json(userGoal);
     }catch  (err) {
