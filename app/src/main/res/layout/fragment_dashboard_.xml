@@ -24,10 +24,9 @@
                 android:background="?android:attr/listDivider" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/currentMonthText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="January"
                 android:textAlignment="center"
                 android:textSize="25sp"
                 android:textStyle="bold" />

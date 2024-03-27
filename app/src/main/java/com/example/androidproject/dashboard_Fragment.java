@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 //import com.anychart.AnyChart;
 //import com.anychart.AnyChartView;
@@ -19,7 +20,10 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +37,8 @@ public class dashboard_Fragment extends Fragment {
 //    AnyChartView anyChartView;
 //    String[] expense = {"Rent", "Grocery", "Food", "Car", "Travel", "Savings","Phone", "Misc."};
 //    int[] cost = {750,300, 100, 400,100, 500, 600, 50, 200};
+    private TextView curMonthText;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,6 +89,10 @@ public class dashboard_Fragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_dashboard_, container, false);
 
         PieChart pieChart = rootView.findViewById(R.id.chart);
+        curMonthText = rootView.findViewById(R.id.currentMonthText);
+
+        curMonthText.setText(getCurrentMonth());
+
 
         ArrayList<PieEntry> entries = new ArrayList<>();
         entries.add( new PieEntry(600f, "Savings"));
@@ -110,6 +120,22 @@ public class dashboard_Fragment extends Fragment {
 
         return rootView;
     }
+
+
+    private String getCurrentMonth (){
+
+        String month[] ={"January", "February", "March", "April", "May", "June", "July", "August", "September", "October","November", "December"};
+        DateFormat dateFormat = new SimpleDateFormat("MM");
+        Date date = new Date();
+        try {
+            int monthIndex = Integer.parseInt(dateFormat.format(date)) - 1;
+            return month[monthIndex];
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return ""
+;    }
 
 //    private void setupChartView() {
 //

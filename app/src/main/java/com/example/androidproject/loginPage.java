@@ -8,29 +8,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.channels.ScatteringByteChannel;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class loginPage extends AppCompatActivity {
 
@@ -157,7 +147,7 @@ public class loginPage extends AppCompatActivity {
 
 
     public void redirectWhenSuccessfulLogin() {
-        Intent intent = new Intent(this, dashboardPage.class);     //Change this to dashboard
+        Intent intent = new Intent(this, dashboardPageRoot.class);     //Change this to dashboard
         startActivity(intent);
     }
     public void CreateAccount(View view) {
