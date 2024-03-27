@@ -41,7 +41,7 @@
         </activity>
 
         <activity
-            android:name=".dashboardPage"
+            android:name=".dashboardPageRoot"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

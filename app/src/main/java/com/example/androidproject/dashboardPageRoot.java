@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.androidproject.databinding.DashboardBinding;
 
-public class dashboardPage  extends AppCompatActivity {
+public class dashboardPageRoot extends AppCompatActivity {
 
     DashboardBinding binding;
 
@@ -21,13 +21,13 @@ public class dashboardPage  extends AppCompatActivity {
 
             binding.bottomNavigationView.setOnItemSelectedListener(item -> {
                 if (item.getItemId() == R.id.goal) {
-                    replaceFragment(new profile());
+                    replaceFragment(new goal_Fragment());
                 } else if (item.getItemId() == R.id.dashboard) {
                     replaceFragment(new dashboard_Fragment());
                 } else if (item.getItemId() == R.id.expense) {
-                    replaceFragment(new profile());
+                    replaceFragment(new expense_Fragment());
                 } else if (item.getItemId() == R.id.profile) {
-                    replaceFragment(new profile());
+                    replaceFragment(new profile_Fragment());
                 }
                 return true;
             });
