@@ -238,7 +238,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textView25"
+                        android:id="@+id/user_Email"
                         android:layout_width="175dp"
                         android:layout_height="40dp"
                         android:layout_margin="3dp"
@@ -267,7 +267,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textView27"
+                        android:id="@+id/profile_monthlyIncome"
                         android:layout_width="175dp"
                         android:layout_height="40dp"
                         android:layout_margin="3dp"

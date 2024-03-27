@@ -56,7 +56,7 @@
             app:cornerRadius="0dp" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/user_fullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="14dp"
@@ -82,7 +82,6 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView25"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -109,7 +108,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView27"
+                android:id="@+id/profile_monthlyIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -136,7 +135,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView29"
+                android:id="@+id/profile_monthlySavings"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -163,7 +162,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView31"
+                android:id="@+id/profile_actualSavings"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

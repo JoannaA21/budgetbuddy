@@ -127,7 +127,6 @@ public class loginPage extends AppCompatActivity {
                 // For example, you can parse the JSON response and update UI components
                 try {
                     JSONObject jsonResponse = new JSONObject(result); //result in JSON
-                    String message = jsonResponse.optString("message"); //result in String
                     writeToInternalStorage("credential.txt", result); //Save result in String to the internal storage
 
                 } catch (JSONException e) {
