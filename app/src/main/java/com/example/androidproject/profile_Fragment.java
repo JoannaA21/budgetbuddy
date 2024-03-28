@@ -1,20 +1,33 @@
 package com.example.androidproject;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,47 +68,59 @@ public class profile_Fragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        TextView user_fullName, user_Email;
+        user_fullName = view.findViewById(R.id.user_fullName);
+        user_Email = view.findViewById(R.id.user_Email);
+        String id = null;
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_profile_, container, false);
 
+        //For- after login
         try {
-
             JSONObject credentialIS = getInternalStorage("credential.txt");
             JSONObject retrieve = credentialIS.getJSONObject("details");
+            Log.d("creds", " " + credentialIS);
+            id = retrieve.getString("id");
 
-
+            user_fullName.setText(retrieve.getString("fname") + " " + retrieve.getString("lname"));
+            user_Email.setText(retrieve.getString("email"));
+            Log.d("user", "info " + credentialIS.getString("details"));
             Log.d("creds", "Creds id: " + retrieve.getString("id") +" " + retrieve.getString("email"));
         } catch(JSONException e) {
             throw new RuntimeException(e);
         }
 
 
-//        Profile details = gson.fromJson(credentialIS, Profile.class);
-//        String id = details.id;
-//        Log.d("creds", "Creds id: " + id );
+//        new GoalsRequestAsynTask().execute("http://143.198.237.154:3001/api/getusergoal/" + id);
+        GoalsRequestAsynTask readTask = new GoalsRequestAsynTask();
+        readTask.execute("http://143.198.237.154:3001/api/getusergoal/" + id);
+//        JSONObject profilegoals = getInternalStorage("profilegoal.txt");
+        // get results from readTask
+        Log.d("info","info " + readTask);
 
-        return rootView;
     }
 
-
-    //Get Internal Storage from App
+    @Override
+    public View onCreateView( LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState)
+    {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
     public JSONObject getInternalStorage(String fileName) {
-        File path = requireContext().getFilesDir();
+        File path = getActivity().getFilesDir();
         File readFrom = new File(path, fileName);
         byte[] content = new byte[(int) readFrom.length()];
 
         try {
+
             FileInputStream stream = new FileInputStream(readFrom);
             stream.read(content);
             String json = new String(content);
@@ -104,18 +129,105 @@ public class profile_Fragment extends Fragment {
             throw new RuntimeException(e);
         }
     }
-//    public String getInternalStorage(String fileName) {
-//        File path = getApplicationContext().getFilesDir();
-//        File readFrom = new File(path, fileName);
-//        byte[] content = new byte[(int)readFrom.length()];
-//
-//        try{
-//            FileInputStream stream = new FileInputStream(readFrom);
-//            stream.read(content);
-//            String json = new Gson().toJson(new String (content)); //Credentials.txt to JSON
-//            return json;
-//        } catch(IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+
+    protected class GoalsRequestAsynTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null; //reads file line by line
+            String response = null;
+
+            try {
+                URL url = new URL(urls[0]);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+
+                InputStream inputStream = urlConnection.getInputStream(); //read file
+                StringBuilder buffer = new StringBuilder();
+
+                if (inputStream == null) {
+                    // Return null to indicate failure
+                    return null;
+                }
+
+                //BufferReader reads JSON file from url
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line).append("\n");
+                }
+
+                response = buffer.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Return null to indicate failure
+                return null;
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect(); //free up connection
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String jsonData) {
+            super.onPostExecute(jsonData);
+            if (jsonData != null) {
+                try {
+                    // Check if the JSON data is an array or an object
+                    if (jsonData.startsWith("[")) {
+                        // If it's an array, parse it as a JSONArray
+                        JSONArray jsonArray = new JSONArray(jsonData);
+                        // Handle JSONArray
+                        Log.d("JSONArray", " " + jsonArray);
+                        writeToInternalStorage("profilegoal.txt", jsonArray.toString());
+                    } else {
+                        // If it's an object, parse it as a JSONObject
+                        JSONObject jsonObject = new JSONObject(jsonData);
+                        // Handle JSONObject
+                        Log.d("JSONObject", " " + jsonObject);
+                        writeToInternalStorage("profilegoal.txt", jsonData);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // Handle JSON parsing error
+                }
+            } else {
+                // Show error message or handle null response here
+                Toast.makeText(getActivity(), "Unable to connect.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+
+    public void writeToInternalStorage(String fileName, String content) {
+        File path = getActivity().getFilesDir();
+        FileOutputStream writer = null;
+        try {
+            writer = new FileOutputStream(new File(path, fileName));
+            writer.write(content.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }
