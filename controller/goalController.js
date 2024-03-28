@@ -35,13 +35,18 @@ const getGoal_ByUserId = async(req, res, next) => {
     const {id} = req.params;
 
     try{
-        // const userGoal = await Goal.findAll({'user_id': id});
-        const userGoal = await Goal.findOne({
+        // const userGoal = await Goal.findAll({
+        //         where: Sequelize.or(
+        //           { "user_id": parseInt(id) } 
+        //         ),
+        //       });
+        const userGoal = await Goal.findAll(
+          {
             where: {
               user_id: id,
-            },
-            order: [['created_at', 'DESC']],
+            }
           });
+        console.log(userGoal);
         res.status(200).json(userGoal);
     }catch  (err) {
         next(err);
