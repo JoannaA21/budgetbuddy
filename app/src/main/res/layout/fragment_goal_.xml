@@ -13,232 +13,57 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/linearLayout9"
-            android:layout_width="411dp"
-            android:layout_height="731dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="1dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:gravity="center"
+            android:text="Set-up your monthly budget"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textView6"
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="10dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/goal_amountGoal"
                 android:layout_width="match_parent"
-                android:layout_height="82dp"
-                android:gravity="center"
-                android:text="Set-up your monthly budget"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_height="100dp"
+                android:hint="Amount Goal" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Other">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/goal_type_other"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:layout_height="100dp"
+                android:hint="hint" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Monthly Income" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:backgroundTint="#068579"
+            android:text="Set Goal"
+            android:textSize="24sp"
+            app:cornerRadius="0dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:hint="Monthly Savings Goal">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="hint" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="406dp"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/button7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Rent"
-                        app:cornerRadius="0dp" />
-
-                    <Button
-                        android:id="@+id/button8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Car"
-                        app:cornerRadius="0dp" />
-
-                    <Button
-                        android:id="@+id/button9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Grocery"
-                        app:cornerRadius="0dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/button10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Utilities"
-                        app:cornerRadius="0dp" />
-
-                    <Button
-                        android:id="@+id/button11"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Travel"
-                        app:cornerRadius="0dp" />
-
-                    <Button
-                        android:id="@+id/button13"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Clothes"
-                        app:cornerRadius="0dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/button15"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="School"
-                        app:cornerRadius="0dp" />
-
-                    <Button
-                        android:id="@+id/button14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Mortgage"
-                        app:cornerRadius="0dp" />
-
-                    <Button
-                        android:id="@+id/button12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Phone"
-                        app:cornerRadius="0dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/button16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Insurance"
-                        app:cornerRadius="0dp" />
-
-                    <Button
-                        android:id="@+id/button17"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#33736D6D"
-                        android:padding="0dp"
-                        android:text="Entetainment"
-                        app:cornerRadius="0dp" />
-                </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:hint="Others">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="hint" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/button18"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="2dp"
-                    android:backgroundTint="#068579"
-                    android:text="Set Goal"
-                    android:textSize="28sp"
-                    app:cornerRadius="0dp" />
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

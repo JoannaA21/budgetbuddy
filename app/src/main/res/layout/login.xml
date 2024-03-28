@@ -82,15 +82,38 @@
             android:textStyle="bold"
             app:cornerRadius="0dp" />
 
-        <TextView
-            android:id="@+id/tv_createAccount"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="CreateAccount"
-            android:padding="20dp"
-            android:text="Create an account"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="265dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Don't have an account yet?"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_createAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="CreateAccount"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="30dp"
+                android:paddingBottom="10dp"
+                android:text="Signup"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
 

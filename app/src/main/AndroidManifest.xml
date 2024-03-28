@@ -31,27 +31,7 @@
         </activity>
 
         <activity
-            android:name=".profilePage"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".dashboardPageRoot"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".expensePage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,7 +51,7 @@
         </activity>
 
         <activity
-            android:name=".goalPage"
+            android:name=".goal_Fragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -81,7 +61,7 @@
         </activity>
 
         <activity
-            android:name=".profile"
+            android:name=".expense_Fragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -89,6 +69,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".dashboard_Fragment"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
