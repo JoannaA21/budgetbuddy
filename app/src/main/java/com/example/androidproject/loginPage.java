@@ -35,14 +35,14 @@ public class loginPage extends AppCompatActivity {
         editTextPassword = findViewById(R.id.password);
 
         Button loginButton = findViewById(R.id.loginButton);
-//        loginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Execute the PostRequestAsyncTask when the button is clicked
-//                new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
-//            }
-//        });
-        redirectWhenSuccessfulLogin();
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Execute the PostRequestAsyncTask when the button is clicked
+                new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
+            }
+        });
+//        redirectWhenSuccessfulLogin();
     }
 
 

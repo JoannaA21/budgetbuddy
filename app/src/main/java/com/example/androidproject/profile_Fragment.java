@@ -86,7 +86,6 @@ public class profile_Fragment extends Fragment {
         try {
             JSONObject credentialIS = getInternalStorage("credential.txt");
             JSONObject retrieve = credentialIS.getJSONObject("details");
-            Log.d("creds", " " + credentialIS);
             id = retrieve.getString("id");
 
             user_fullName.setText(retrieve.getString("fname") + " " + retrieve.getString("lname"));
@@ -101,9 +100,17 @@ public class profile_Fragment extends Fragment {
 //        new GoalsRequestAsynTask().execute("http://143.198.237.154:3001/api/getusergoal/" + id);
         GoalsRequestAsynTask readTask = new GoalsRequestAsynTask();
         readTask.execute("http://143.198.237.154:3001/api/getusergoal/" + id);
-//        JSONObject profilegoals = getInternalStorage("profilegoal.txt");
-        // get results from readTask
-        Log.d("info","info " + readTask);
+        try{
+            JSONObject profilegoals = getInternalStorage("profile.txt");
+            JSONArray jsonArray = new JSONArray(profilegoals);
+            Log.d("user", "info " + jsonArray);
+
+            // get results from readTask
+            Log.d("info","info " + readTask);
+        }catch (JSONException e){
+            throw new RuntimeException(e);
+        }
+
 
     }
 
@@ -188,15 +195,16 @@ public class profile_Fragment extends Fragment {
                     if (jsonData.startsWith("[")) {
                         // If it's an array, parse it as a JSONArray
                         JSONArray jsonArray = new JSONArray(jsonData);
+                        String jsonString = jsonArray.toString();
                         // Handle JSONArray
                         Log.d("JSONArray", " " + jsonArray);
-                        writeToInternalStorage("profilegoal.txt", jsonArray.toString());
-                    } else {
-                        // If it's an object, parse it as a JSONObject
-                        JSONObject jsonObject = new JSONObject(jsonData);
-                        // Handle JSONObject
-                        Log.d("JSONObject", " " + jsonObject);
-                        writeToInternalStorage("profilegoal.txt", jsonData);
+                        writeToInternalStorage("profile.txt", jsonArray);
+//                    } else {
+//                        // If it's an object, parse it as a JSONObject
+//                        JSONObject jsonObject = new JSONObject(jsonData);
+//                        // Handle JSONObject
+//                        Log.d("JSONObject", " " + jsonObject);
+//                        writeToInternalStorage("profilegoal.txt", jsonData);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -211,9 +219,11 @@ public class profile_Fragment extends Fragment {
     }
 
 
-    public void writeToInternalStorage(String fileName, String content) {
+
+    public void writeToInternalStorage(String fileName, JSONArray jsonArray) {
         File path = getActivity().getFilesDir();
         FileOutputStream writer = null;
+        String content = jsonArray.toString();
         try {
             writer = new FileOutputStream(new File(path, fileName));
             writer.write(content.getBytes());
@@ -231,3 +241,5 @@ public class profile_Fragment extends Fragment {
     }
 
 }
+
+
