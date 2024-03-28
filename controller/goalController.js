@@ -46,8 +46,22 @@ const getGoal_ByUserId = async(req, res, next) => {
               user_id: id,
             }
           });
-        console.log(userGoal);
-        res.status(200).json(userGoal);
+        // console.log(userGoal);
+        if (userGoal.length > 0) {
+            console.log('data found!');
+            res.status(200).json(userGoal);
+        } else {
+            console.log('No data found!');
+            data = [{
+                "monthly_income": "0",
+                "monthly_saving_goal": "0",
+                "goal_type": "",
+                "user_id": id
+            }]
+            res.status(200).json(data);
+        }
+            
+
     }catch  (err) {
         next(err);
         console.log('error: ' + err.message);
