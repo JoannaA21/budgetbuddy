@@ -42,7 +42,7 @@ public class loginPage extends AppCompatActivity {
                 new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
             }
         });
-       // redirectWhenSuccessfulLogin();
+        redirectWhenSuccessfulLogin();
     }
 
 
