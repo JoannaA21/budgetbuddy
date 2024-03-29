@@ -1,5 +1,7 @@
 package com.example.androidproject;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -125,8 +130,164 @@ public class profile_Fragment extends Fragment {
 
             Log.d("info","readTask: " + readTask);
 
-
+        Button loginButton = view.findViewById(R.id.profile_editIncome);
+        String finalId = id;
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Income amount will be edited and send data to API
+                showCustomDialog(finalId);
+            }
+        });
     }
+
+    // This will show the Dialog Box for editing Income
+    private void showCustomDialog(String user_id) {
+        // Create the AlertDialog Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // Inflate the custom layout for the dialog box
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View dialogView = inflater.inflate(R.layout.dialog_box_layout, null);
+        builder.setView(dialogView);
+
+        // Initialize views from the dialog layout
+        EditText dialogEditText = dialogView.findViewById(R.id.dialogEditText);
+
+        Button dialogButton = dialogView.findViewById(R.id.dialogButton);
+
+        // Set click listener for the Button
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Retrieve text from the TextView
+                String textFromTextView = dialogEditText.getText().toString();
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("monthly_income", textFromTextView);
+                    json.put("user_id", user_id);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // Call the helper method to send data to the API
+                sendDataToAPI(json);
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    // sendData To API
+    private void sendDataToAPI(JSONObject json) {
+        // Call AsyncTask to send data to the API
+        new SendDataToApiTask().execute(json);
+    }
+
+    private class SendDataToApiTask extends AsyncTask<JSONObject, Void, String> {
+
+        @Override
+        protected String doInBackground(JSONObject... jsonObjects) {
+            try {
+                // Get the JSONObject from the parameters
+                JSONObject jsonData = jsonObjects[0];
+
+                HttpURLConnection urlConnection = null;
+                BufferedReader reader = null; //reads file line by line
+                String response = null;
+
+                try {
+                    URL url = new URL("http://143.198.237.154:3001/api/createincome");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true); // Allow writing data to the connection
+
+                    // Set any headers required by the server
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("Accept", "application/json");
+
+                    // Convert JSON data to a string
+                    String jsonString = jsonData.toString();
+                    Log.d("SendDataToApiTask", "SendDataToApiTask jsonString: " + jsonString);
+
+                    // Write the data to be sent in the request body
+                    DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                    outputStream.writeBytes(jsonString);
+                    outputStream.flush();
+                    outputStream.close();
+
+                    // Get the response from the server and read it
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_CREATED) {
+                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        StringBuilder responseBuilder = new StringBuilder();
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            responseBuilder.append(inputLine);
+                        }
+                        in.close();
+                        response = responseBuilder.toString();
+                    } else {
+                        response = "POST request failed with response code: " + responseCode;
+                    }
+
+                    // Close the connection
+                    connection.disconnect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    response = "Exception: " + e.getMessage();
+                }
+                return response;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            // Handle the response here
+            if (response != null) {
+                // Response received successfully, save info to Internal storage
+                // For example, you can parse the JSON response and update UI components
+                try {
+                    JSONObject jsonResponse = new JSONObject(response); //result in JSON
+                    writeToInternalStorage("profile.txt", response); //Save result in String to the internal storage
+                    Toast.makeText(getActivity(), "Update Income Success.", Toast.LENGTH_SHORT).show();
+                    redirectWhenSuccessfulLogin();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    // Handle JSON parsing error
+                }
+
+                Log.d("PostRequestAsyncTask", "Response: " + response);
+            } else {
+                // Handle error case, e.g., API request failed
+                Log.d("PostRequestAsyncTask", "Response: " + response);
+            }
+        }
+
+        public void writeToInternalStorage(String fileName, String content) {
+            File path = getActivity().getFilesDir();
+
+            try {
+                FileOutputStream writer = new FileOutputStream(new File(path, fileName));
+                writer.write(content.getBytes());
+                Log.d("Internal Storage", "Profile: " + content);
+            }catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+        public void redirectWhenSuccessfulLogin() {
+            Intent intent = new Intent(getActivity(), dashboardPageRoot.class);     //Change this to dashboard
+            startActivity(intent);
+        }
+    }
+
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
