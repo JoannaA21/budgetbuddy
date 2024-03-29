@@ -43,11 +43,50 @@ public class registerPage extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        // Execute AsyncTask to send registration request
-        new RegisterRequestAsyncTask().execute("http://143.198.237.154:3001/api/createuser");
+
+                if (validateForm()) {
+                    // Execute AsyncTask to send registration request
+                    new RegisterRequestAsyncTask().execute("http://143.198.237.154:3001/api/createuser");
+                    LoginPage(v);
+                }
             }
         });
+    }
 
+    private boolean validateForm() {
+        String fname = input_firstname.getText().toString().trim();
+        String lname = input_lastname.getText().toString().trim();
+        String email = input_email.getText().toString().trim();
+        String password = input_password.getText().toString().trim();
+        String confirmpw = input_confirmpw.getText().toString();
+
+        // Validation of user input
+        if (TextUtils.isEmpty(fname)) {
+            input_firstname.setError("First name is required");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(lname)) {
+            input_lastname.setError("Last name is required");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(email)) {
+            input_email.setError("Email is required");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            input_password.setError("Password is required");
+            return false;
+        }
+
+        if (!password.equals(confirmpw)) {
+            input_confirmpw.setError("Passwords do not match");
+            return false;
+        }
+
+        return true;
     }
 
     protected class RegisterRequestAsyncTask extends AsyncTask<String, Void, String> {
@@ -63,20 +102,6 @@ public class registerPage extends AppCompatActivity {
                 String lname = input_lastname.getText().toString();
                 String email = input_email.getText().toString();
                 String password = input_password.getText().toString();
-
-                // Validation of user input
-                if (TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) ||
-                        TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                    return "Please fill in all fields.";
-                }
-
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    return "Invalid email address.";
-                }
-
-                if (!password.equals(input_confirmpw.getText().toString())) {
-                    return "Passwords do not match.";
-                }
 
                 // Create JSON object with user data
                 JSONObject createAccount = new JSONObject();
@@ -131,13 +156,10 @@ public class registerPage extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             //NEED TO IMPLEMENT...
-            //WHAT HAPPENS ON EXECUTION???
             if(result != null) {
-                Log.d("RegisterRequestAsyncTask", "Successful");
-                Log.d("RegisterRequestAsyncTask", "Response: " + result);
+                Log.d("RegisterRequestAsyncTask", "Response: Successful " + result);
             }else {
-                Log.d("RegisterRequestAsyncTask", "Unsuccessful");
-                Log.d("RegisterRequestAsyncTask", "Response: " + result);
+                Log.d("RegisterRequestAsyncTask", "Response: Unsuccessful " + result);
             }
         }
 
