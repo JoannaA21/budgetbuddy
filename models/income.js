@@ -3,22 +3,33 @@ const dbConfig = require('../config/dbConfig');
 
 const sequelize = dbConfig.connect();
 
-const Goal = sequelize.define(
-    'Goal',
+const Income = sequelize.define(
+    'Income',
     {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        amount_goal: {
+        monthly_income: {
             type: DataTypes.DECIMAL,
             allowNull: false,
             defaultValue: 0
         },
-        goal_type: {
-            type: DataTypes.STRING,
+        all_savings: {
+            type: DataTypes.DECIMAL,
             allowNull: false,
+            defaultValue: 0
+        },
+        current_balance: {
+            type: DataTypes.DECIMAL,
+            allowNull: false,
+            defaultValue: 0
+        },
+        expenses: {
+            type: DataTypes.DECIMAL,
+            allowNull: false,
+            defaultValue: 0
         },
         user_id: {
             type: DataTypes.INTEGER,
@@ -27,17 +38,17 @@ const Goal = sequelize.define(
         created_at: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        updated_at: {
-          type: DataTypes.STRING,
-          allowNull: false
-        }
+          },
+          updated_at: {
+            type: DataTypes.STRING,
+            allowNull: false
+          }
     }, 
         {
-            tableName: 'Goal',
+            tableName: 'Income',
             timestamps: false
         }
 )
 
 
-module.exports = Goal;
+module.exports = Income;

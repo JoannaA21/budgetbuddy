@@ -6,7 +6,7 @@ const today = new Date(timeElapsed);
 
 // Create goal (post)
 const createGoal = async(req, res, next) => {
-    const {user_id, monthly_income, monthly_saving_goal, goal_type} = req.body;
+    const {user_id, amount_goal, goal_type} = req.body;
 
     try {
 
@@ -15,8 +15,7 @@ const createGoal = async(req, res, next) => {
         
         const goal = await Goal.create({
             user_id,
-            monthly_income,
-            monthly_saving_goal,
+            amount_goal,
             goal_type,
             created_at,
             updated_at
@@ -35,11 +34,6 @@ const getGoal_ByUserId = async(req, res, next) => {
     const {id} = req.params;
 
     try{
-        // const userGoal = await Goal.findAll({
-        //         where: Sequelize.or(
-        //           { "user_id": parseInt(id) } 
-        //         ),
-        //       });
         const userGoal = await Goal.findAll(
           {
             where: {
@@ -53,8 +47,7 @@ const getGoal_ByUserId = async(req, res, next) => {
         } else {
             console.log('No data found!');
             data = [{
-                "monthly_income": "0",
-                "monthly_saving_goal": "0",
+                "amount_goal": "0",
                 "goal_type": "",
                 "user_id": id
             }]

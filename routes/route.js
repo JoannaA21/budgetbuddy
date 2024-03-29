@@ -3,6 +3,7 @@ const router = express.Router();
 const expenseController = require('../controller/expenseController');
 const goalController = require('../controller/goalController');
 const userController = require('../controller/usersController');
+const incomeController = require('../controller/incomeController');
 const { login, logout } = require('../controller/loginController');
 
 
@@ -27,6 +28,11 @@ router.get('/getuserexpense/:id', expenseController.getExpense_ByUserId);
 router.post('/creategoal', goalController.createGoal);
 //Route for getGoal_ByUserId
 router.get('/getusergoal/:id', goalController.getGoal_ByUserId);
+
+//Route for createIncome
+router.post('/createincome', incomeController.createIncome);
+//Route for getGoal_ByUserId
+router.get('/getuserincome/:id', incomeController.getIncome_ByUserId);
 
 
 
