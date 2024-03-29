@@ -71,9 +71,14 @@ public class profile_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView user_fullName, user_Email;
+        TextView user_fullName, user_Email, profile_monthlyIncome;
+        TextView profile_allSavings, profile_expenses, profile_currentBalance;
         user_fullName = view.findViewById(R.id.user_fullName);
         user_Email = view.findViewById(R.id.user_Email);
+        profile_monthlyIncome = view.findViewById(R.id.profile_monthlyIncome);
+        profile_allSavings = view.findViewById(R.id.profile_allSavings);
+        profile_expenses = view.findViewById(R.id.profile_expenses);
+        profile_currentBalance = view.findViewById(R.id.profile_currentBalance);
         String id = null;
 
         if (getArguments() != null) {
@@ -99,17 +104,26 @@ public class profile_Fragment extends Fragment {
 
 //        new GoalsRequestAsynTask().execute("http://143.198.237.154:3001/api/getusergoal/" + id);
         GoalsRequestAsynTask readTask = new GoalsRequestAsynTask();
-        readTask.execute("http://143.198.237.154:3001/api/getusergoal/" + id);
-        try{
-            JSONObject profilegoals = getInternalStorage("profile.txt");
-            JSONArray jsonArray = new JSONArray(profilegoals);
-            Log.d("user", "info " + jsonArray);
+        readTask.execute("http://143.198.237.154:3001/api/getuserincome/" + id);
+        if (isFileExists("profile.txt")){
+            try{
+                JSONObject profilegoals = getInternalStorage("profile.txt");
+                Log.d("user", "info " + profilegoals.get("monthly_income"));
 
-            // get results from readTask
-            Log.d("info","info " + readTask);
-        }catch (JSONException e){
-            throw new RuntimeException(e);
+                // get results from readTask
+                Log.d("info","info " + readTask);
+
+                // add text to profile
+                profile_monthlyIncome.setText("$ " + profilegoals.get("monthly_income"));
+                profile_allSavings.setText("$ " + profilegoals.get("all_savings"));
+                profile_expenses.setText("$ " + profilegoals.get("expenses"));
+                profile_currentBalance.setText("$ " + profilegoals.get("current_balance"));
+            }catch (JSONException e){
+                throw new RuntimeException(e);
+            }
         }
+
+            Log.d("info","readTask: " + readTask);
 
 
     }
@@ -120,6 +134,12 @@ public class profile_Fragment extends Fragment {
     {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    public boolean isFileExists(String fileName) {
+        File path = getActivity().getFilesDir();
+        File file = new File(path, fileName);
+        return file.exists();
     }
     public JSONObject getInternalStorage(String fileName) {
         File path = getActivity().getFilesDir();
@@ -195,16 +215,31 @@ public class profile_Fragment extends Fragment {
                     if (jsonData.startsWith("[")) {
                         // If it's an array, parse it as a JSONArray
                         JSONArray jsonArray = new JSONArray(jsonData);
-                        String jsonString = jsonArray.toString();
-                        // Handle JSONArray
-                        Log.d("JSONArray", " " + jsonArray);
-                        writeToInternalStorage("profile.txt", jsonArray);
-//                    } else {
-//                        // If it's an object, parse it as a JSONObject
-//                        JSONObject jsonObject = new JSONObject(jsonData);
-//                        // Handle JSONObject
-//                        Log.d("JSONObject", " " + jsonObject);
-//                        writeToInternalStorage("profilegoal.txt", jsonData);
+                        Double monthly_income, all_savings, expenses, current_balance;
+                        JSONObject profile = new JSONObject();
+                        // Iterate over the elements of the JSONArray
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            // Get the JSONObject at index i
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            // Access the values from the JSONObject
+                            monthly_income = jsonObject.getDouble("monthly_income");
+                            all_savings = jsonObject.getDouble("all_savings");
+                            expenses = jsonObject.getDouble("expenses");
+                            current_balance = jsonObject.getDouble("current_balance");
+
+                            // Do something with the values
+                            Log.d("JSONObject", "monthly_income: " + monthly_income);
+                            Log.d("JSONObject", "all_savings: " + all_savings);
+                            Log.d("JSONObject", "expenses: " + expenses);
+                            Log.d("JSONObject", "current_balance: " + current_balance);
+                            profile.put("monthly_income", monthly_income);
+                            profile.put("all_savings", all_savings);
+                            profile.put("expenses", expenses);
+                            profile.put("current_balance", current_balance);
+                        }
+                        Log.d("JSONArray", " " + profile);
+                        writeToInternalStorage("profile.txt", profile.toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -216,28 +251,18 @@ public class profile_Fragment extends Fragment {
             }
         }
 
-    }
+        public void writeToInternalStorage(String fileName, String content) {
+            File path = getActivity().getFilesDir();
 
-
-
-    public void writeToInternalStorage(String fileName, JSONArray jsonArray) {
-        File path = getActivity().getFilesDir();
-        FileOutputStream writer = null;
-        String content = jsonArray.toString();
-        try {
-            writer = new FileOutputStream(new File(path, fileName));
-            writer.write(content.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                FileOutputStream writer = new FileOutputStream(new File(path, fileName));
+                writer.write(content.getBytes());
+                Log.d("Internal Storage", "Profile: " + content);
+            }catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
+
     }
 
 }
