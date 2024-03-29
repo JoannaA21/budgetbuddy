@@ -34,8 +34,26 @@ const getExpense_ByUserId = async(req, res, next) => {
     const {id} = req.params;
 
     try{
-        const userExpense = await Expense.findAll({'user_id': id});
-        res.status(200).json(userExpense);
+        const userExpense = await Expense.findAll(
+            {
+              where: {
+                user_id: id,
+              }
+            });
+          // console.log(userGoal);
+          if (userExpense.length > 0) {
+              console.log('data found!');
+              res.status(200).json(userExpense);
+          } else {
+              console.log('No data found!');
+              data = [{
+                  "cost": "0",
+                  "expense_type": "",
+                  "user_id": id
+              }]
+              res.status(200).json(data);
+          }
+        // res.status(200).json(userExpense);
     }catch  (err) {
         next(err);
         console.log('error: ' + err.message);
