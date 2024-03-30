@@ -18,15 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="82dp"
             android:gravity="center"
-            android:text="Set-up your monthly budget"
+            android:text="Set-up a goal"
             android:textSize="24sp"
             android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="10dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -34,27 +28,27 @@
             android:layout_margin="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/goal_amountGoal"
+                android:id="@+id/input_goalType"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:hint="Amount Goal" />
+                android:hint="Goal Type" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="Other">
+            android:layout_margin="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/goal_type_other"
+                android:id="@+id/input_amountGoal"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:hint="hint" />
+                android:hint="Amount Goal"
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_setGoal"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_gravity="center"

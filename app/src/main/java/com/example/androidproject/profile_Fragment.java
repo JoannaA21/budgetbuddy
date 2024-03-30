@@ -257,7 +257,7 @@ public class profile_Fragment extends Fragment {
                     JSONObject jsonResponse = new JSONObject(response); //result in JSON
                     writeToInternalStorage("profilegoals.txt", response); //Save result in String to the internal storage
                     Toast.makeText(getActivity(), "Update Income Success.", Toast.LENGTH_SHORT).show();
-                    redirectAfterIncomeEdit();
+                    redirectToDashboard();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     // Handle JSON parsing error
@@ -283,8 +283,8 @@ public class profile_Fragment extends Fragment {
         }
 
 
-        public void redirectAfterIncomeEdit() {
-            Intent intent = new Intent(getActivity(), dashboardPageRoot.class);     //Change this to dashboard
+        public void redirectToDashboard() {
+            Intent intent = new Intent(getActivity(), dashboardPageRoot.class);
             startActivity(intent);
         }
     }
@@ -427,7 +427,9 @@ public class profile_Fragment extends Fragment {
         }
 
     }
-
 }
 
+
+
+//****************************Total Expense on the profile page is not reflecting after adding an expense
 
