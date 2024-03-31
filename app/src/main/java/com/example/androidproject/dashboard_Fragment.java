@@ -49,6 +49,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +61,10 @@ public class dashboard_Fragment extends Fragment {
 
 
     private TextView curMonthText;
+    private TextView goalInfoText;
+    public double total_Expenses;
+    public double total_goals;
+    public double total_income;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -111,7 +117,9 @@ public class dashboard_Fragment extends Fragment {
         PieChart pieChart = rootView.findViewById(R.id.chart);
         TableLayout tableLayout = rootView.findViewById(R.id.expenseDataTable);
         curMonthText = rootView.findViewById(R.id.currentMonthText);
+        goalInfoText = rootView.findViewById(R.id.goalInfo);
         curMonthText.setText(getCurrentMonth());
+        TableRow row = null;
         String id = null;
         ArrayList<PieEntry> entries = new ArrayList<>();
 
@@ -120,7 +128,7 @@ public class dashboard_Fragment extends Fragment {
 
         //For- after login
         try {
-            JSONObject credentialIS = getInternalStorage("credential.txt");
+            JSONObject credentialIS = Utilities.getInternalStorage(getActivity(),"credential.txt");
             JSONObject retrieve = credentialIS.getJSONObject("details");
             id = retrieve.getString("id");
             Log.d("user", "info " + credentialIS.getString("details"));
@@ -130,13 +138,19 @@ public class dashboard_Fragment extends Fragment {
         }
 
 
-        GetExpenseRequestAsynTask readTask = new GetExpenseRequestAsynTask();
-        readTask.execute("http://143.198.237.154:3001/api/getuserexpense/" + id);
+        GetExpenseRequestAsynTask readExpenseTask = new GetExpenseRequestAsynTask();
+        readExpenseTask.execute("http://143.198.237.154:3001/api/getuserexpense/" + id);
+
+        GetSavingsRequestAsynTask readSavingsTask = new GetSavingsRequestAsynTask();
+        readSavingsTask.execute("http://143.198.237.154:3001/api/getuserincome/" + id);
+
+        GetGoalsRequestAsynTask readGoalsTask = new GetGoalsRequestAsynTask();
+        readGoalsTask.execute("http://143.198.237.154:3001/api/getusergoal/" + id);
 
         // Check if the expenses file exists
-        if (isFileExists("expenses.txt")) {
+        if (Utilities.isFileExists(getActivity(),"expenses.txt")) {
            // Log.d("Debug", "There is expenses.txt");
-            String jsonString = String.valueOf(getJSONArrayFromInternalStorage("expenses.txt"));
+            String jsonString = String.valueOf(Utilities.getJSONArrayFromInternalStorage(getActivity(),"expenses.txt"));
             //Log.d("JSON Content", "Content from file: " + jsonString);
 
             try {
@@ -148,48 +162,10 @@ public class dashboard_Fragment extends Fragment {
                     double cost = expenseObject.getDouble("cost");
                     // Create a PieEntry with the extracted data
                     entries.add(new PieEntry((float) cost, expenseType));
-                    // Create a new TableRow
-                    TableRow row = new TableRow(getContext());
-                    TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-                            TableRow.LayoutParams.MATCH_PARENT,
-                            TableRow.LayoutParams.WRAP_CONTENT
-                    );
-//                    layoutParams.setMargins(10,10,10,10);
-                    row.setLayoutParams(layoutParams);
+                    row = addDataToTable(expenseType,cost,"expense");
+                    total_Expenses += cost;
 
-                    // Create TextView for expense type
-                    TextView expenseTypeTextView = new TextView(getContext());
-                    TableRow.LayoutParams params = new TableRow.LayoutParams(
-                            TableRow.LayoutParams.WRAP_CONTENT,
-                            TableRow.LayoutParams.WRAP_CONTENT
-                    );
-//                    params.setMargins(30,30,30,30);
-                    expenseTypeTextView.setText(expenseType);
-                    expenseTypeTextView.setHeight(dpToPx(getContext(), 50));
-                    expenseTypeTextView.setWidth(dpToPx(getContext(), 180));
-                    expenseTypeTextView.setBackgroundColor(Color.parseColor("#239B90"));
-                    expenseTypeTextView.setPadding(dpToPx(getContext(), 10), dpToPx(getContext(), 5), dpToPx(getContext(), 10), dpToPx(getContext(), 5));
-                    expenseTypeTextView.setTextSize(16); 
-                    expenseTypeTextView.setTypeface(null, Typeface.BOLD);
-                    expenseTypeTextView.setGravity(Gravity.START);
-                    row.addView(expenseTypeTextView);
-
-                    // Create TextView for expense cost
-                    TextView expenseCostTextView = new TextView(getContext());
-                    expenseCostTextView.setLayoutParams(new TableRow.LayoutParams(
-                            TableRow.LayoutParams.WRAP_CONTENT,
-                            TableRow.LayoutParams.WRAP_CONTENT
-                    ));
-
-                    expenseCostTextView.setText(String.valueOf(cost));
-//                    expenseCostTextView.setTextColor(Color.BLACK);
-                    expenseCostTextView.setPadding(dpToPx(getContext(), 15), dpToPx(getContext(), 10), dpToPx(getContext(), 10), dpToPx(getContext(), 5));
-                    expenseCostTextView.setTextSize(22);
-                    expenseCostTextView.setTypeface(null, Typeface.BOLD | Typeface.ITALIC);
-                    expenseCostTextView.setGravity(Gravity.START);
-                    row.addView(expenseCostTextView);
-
-                    // Add the TableRow to the TableLayout
+                  // Add the TableRow to the TableLayout
                     tableLayout.addView(row);
                 }
             } catch (JSONException e) {
@@ -197,6 +173,56 @@ public class dashboard_Fragment extends Fragment {
             }
         }
 
+
+        if (Utilities.isFileExists(getActivity(),"savings.txt")){
+            try{
+                JSONObject data = Utilities.getInternalStorage(getActivity(),"savings.txt");
+                //Log.d("user", "info " + data.get("monthly_income"));
+
+                String expenseType = "Savings";
+                double monthlyIncomeValue = data.getDouble("monthly_income");
+//                double monthlyGoalValue = data.getDouble("monthly_goal");
+//                double monthlyIncomeValue = data.getDouble("monthly_income");
+                double cost = monthlyIncomeValue - total_Expenses;
+                entries.add(new PieEntry((float) cost, expenseType));
+                row = addDataToTable(expenseType, cost, "savings");
+                tableLayout.addView(row);
+                total_income = monthlyIncomeValue;
+            }catch (JSONException e){
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (Utilities.isFileExists(getActivity(),"goals.txt")) {
+            String jsonString = String.valueOf(Utilities.getJSONArrayFromInternalStorage(getActivity(),"goals.txt"));
+
+            try {
+                JSONArray goalsArray = new JSONArray(jsonString);
+                for (int i = 0; i < goalsArray.length(); i++) {
+                    JSONObject goalObject = goalsArray.getJSONObject(i);
+                    // Extract goal_type and amount from each goals object
+                    String goalType =  goalObject.getString("goal_type");
+                    double amount = goalObject.getDouble("amount_goal");
+                    total_goals += amount;
+                }
+
+                if((total_income - total_Expenses) > total_goals){
+                    goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS");
+                    //goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS"+"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
+                }else{
+                    double over = ((total_income - total_Expenses) - total_goals) * -1;
+                    goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET");
+                   // goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET" +"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
+                    goalInfoText.setTextColor(Color.RED);
+
+                    Log.d("Expense", "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
 
         PieDataSet pieDataSet = new PieDataSet(entries, "Budget");
@@ -231,105 +257,68 @@ public class dashboard_Fragment extends Fragment {
                 ;
     }
 
+    private TableRow addDataToTable(String expense_type, Double cost, String type){
+        TableRow row = new TableRow(getContext());
+        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+        );
+//                    layoutParams.setMargins(10,10,10,10);
+        row.setLayoutParams(layoutParams);
 
-    public boolean isFileExists(String fileName) {
-        File path = getActivity().getFilesDir();
-        File file = new File(path, fileName);
-        return file.exists();
+        // Create TextView for expense type
+        TextView expenseTypeTextView = new TextView(getContext());
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+        );
+//                    params.setMargins(30,30,30,30);
+        expenseTypeTextView.setText(expense_type);
+        expenseTypeTextView.setHeight(dpToPx(getContext(), 50));
+        expenseTypeTextView.setWidth(dpToPx(getContext(), 180));
+        expenseTypeTextView.setBackgroundColor(Objects.equals(type, "expense") ?Color.parseColor("#239B90"): Color.parseColor("#2ab05d"));
+        expenseTypeTextView.setPadding(dpToPx(getContext(), 10), dpToPx(getContext(), 5), dpToPx(getContext(), 10), dpToPx(getContext(), 5));
+        expenseTypeTextView.setTextSize(16);
+        expenseTypeTextView.setTypeface(null, Typeface.BOLD);
+        expenseTypeTextView.setGravity(Gravity.START);
+        row.addView(expenseTypeTextView);
+
+        // Create TextView for expense cost
+        TextView expenseCostTextView = new TextView(getContext());
+        expenseCostTextView.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT
+        ));
+
+        expenseCostTextView.setText(String.valueOf(cost));
+        expenseCostTextView.setTextColor(Objects.equals(type, "expense") ?Color.BLACK: Color.parseColor("#2ab05d"));
+        expenseCostTextView.setPadding(dpToPx(getContext(), 15), dpToPx(getContext(), 10), dpToPx(getContext(), 10), dpToPx(getContext(), 5));
+        expenseCostTextView.setTextSize(22);
+        expenseCostTextView.setTypeface(null, Typeface.BOLD_ITALIC);
+        expenseCostTextView.setGravity(Gravity.START);
+        row.addView(expenseCostTextView);
+
+        // Add the TableRow to the TableLayout
+
+        return row;
+
+
     }
 
-    public JSONArray getJSONArrayFromInternalStorage(String fileName) {
-        File path = getActivity().getFilesDir();
-        File file = new File(path, fileName);
-        byte[] content = new byte[(int) file.length()];
-
-        try {
-            FileInputStream stream = new FileInputStream(file);
-            stream.read(content);
-            String json = new String(content);
-
-            if (json.trim().startsWith("[")) {
-                return new JSONArray(json);
-            } else {
-                // Log an error or handle the invalid JSON content
-                Log.e("JSON Parsing", "Invalid JSON array content");
-                return new JSONArray();
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            return new JSONArray();
-        }
-    }
-
-    public JSONObject getInternalStorage(String fileName) {
-        File path = getActivity().getFilesDir();
-        File readFrom = new File(path, fileName);
-        byte[] content = new byte[(int) readFrom.length()];
-
-        try {
-
-            FileInputStream stream = new FileInputStream(readFrom);
-            stream.read(content);
-            String json = new String(content);
-            return new JSONObject(json);
-        } catch (IOException | JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     protected class GetExpenseRequestAsynTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) {
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null; //reads file line by line
-            String response = null;
-
-            try {
-                URL url = new URL(urls[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-
-                InputStream inputStream = urlConnection.getInputStream(); //read file
-                StringBuilder buffer = new StringBuilder();
-
-                if (inputStream == null) {
-                    // Return null to indicate failure
-                    return null;
-                }
-
-                //BufferReader reads JSON file from url
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line).append("\n");
-                }
-
-                response = buffer.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Return null to indicate failure
-                return null;
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect(); //free up connection
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            String response = Utilities.fetchDataFromUrl(urls[0]);
+            Log.d("Expense Debg", response);
             return response;
         }
-
 
         @Override
         protected void onPostExecute(String jsonData) {
             super.onPostExecute(jsonData);
+            Log.d("Expense Debg on post Exeutr", jsonData);
             if (jsonData != null) {
                 try {
                     // Check if the JSON data is an array or an object
@@ -340,13 +329,22 @@ public class dashboard_Fragment extends Fragment {
                         // Create a JSONArray to store expense objects
                         JSONArray expensesArray = new JSONArray();
 
+
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            Log.d("Expense Debg in for loop", String.valueOf(jsonObject.length()));
 
                             // Extract expense_type and cost
-                            String expenseType = jsonObject.getString("expense_type");
-                            double cost = jsonObject.getDouble("cost");
-
+                            String expenseType = jsonObject.getString("expense_type") != null ? jsonObject.getString("expense_type"): "None";
+                            Log.d("Expense Debg in for loop", expenseType);
+                            double cost =  0.0;
+                            if(jsonObject.get("cost") instanceof Integer){
+                                 cost = jsonObject.getDouble("cost");
+                            } else if (jsonObject.get("cost") instanceof String) {
+                                 cost = 0.00;
+                            }
+                           // double cost = jsonObject.getDouble("cost") != 0 ? jsonObject.getDouble("cost"): 0;
+                            Log.d("Expense Debg in for loop", String.valueOf(cost));
 
                             JSONObject expenseObject = new JSONObject();
                             expenseObject.put("expense_type", expenseType);
@@ -354,9 +352,11 @@ public class dashboard_Fragment extends Fragment {
 
                             // Add the expense object to the expenses array
                             expensesArray.put(expenseObject);
+
+
                         }
                         Log.d("ExpensesArray", " " + expensesArray.toString());
-                        writeToInternalStorage("expenses.txt", expensesArray.toString());
+                        Utilities.writeToInternalStorage(getActivity(),"expenses.txt", expensesArray.toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -366,32 +366,122 @@ public class dashboard_Fragment extends Fragment {
             }
         }
 
-        public void writeToInternalStorage(String fileName, String content) {
-            File path = getActivity().getFilesDir();
+    }
 
-            FileOutputStream writer = null;
-            try {
-                writer = new FileOutputStream(new File(path, fileName));
-                writer.write(content.getBytes());
-                Log.d("Internal Storage", "Content written to " + fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity(), "Error writing to internal storage", Toast.LENGTH_SHORT).show();
-            } finally {
-                if (writer != null) {
-                    try {
-                        writer.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+
+    protected class GetSavingsRequestAsynTask extends AsyncTask<String, Void, String> {
+
+        protected String doInBackground(String... urls) {
+            String response = Utilities.fetchDataFromUrl(urls[0]);
+            Log.d("Expense Debg", response);
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String jsonData) {
+            super.onPostExecute(jsonData);
+            if (jsonData != null) {
+                try {
+                    // Check if the JSON data is an array or an object
+                    if (jsonData.startsWith("[")) {
+                        // If it's an array, parse it as a JSONArray
+                        JSONArray jsonArray = new JSONArray(jsonData);
+                        Double monthly_income, all_savings, expenses, current_balance;
+                        JSONObject profile = new JSONObject();
+                        // Iterate over the elements of the JSONArray
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            // Get the JSONObject at index i
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            // Access the values from the JSONObject
+                            monthly_income = jsonObject.getDouble("monthly_income");
+                            all_savings = jsonObject.getDouble("all_savings");
+                            expenses = jsonObject.getDouble("expenses");
+                            current_balance = jsonObject.getDouble("current_balance");
+
+                            // Do something with the values
+                            profile.put("monthly_income", monthly_income);
+                            profile.put("all_savings", all_savings);
+                            profile.put("expenses", expenses);
+                            profile.put("current_balance", current_balance);
+                        }
+                        Log.d("JSONArray", " " + profile);
+                        Utilities.writeToInternalStorage(getActivity(),"savings.txt", profile.toString());
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+            } else {
+                // Show error message or handle null response here
+                Toast.makeText(getActivity(), "Unable to connect.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+
+    protected class GetGoalsRequestAsynTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = Utilities.fetchDataFromUrl(urls[0]);
+            Log.d("Expense Debg", response);
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String jsonData) {
+            super.onPostExecute(jsonData);
+            Log.d("Expense Debg on post Exeutr", jsonData);
+            if (jsonData != null) {
+                try {
+                    // Check if the JSON data is an array or an object
+                    if (jsonData.startsWith("[")) {
+                        // If it's an array, parse it as a JSONArray
+                        JSONArray jsonArray = new JSONArray(jsonData);
+
+                        // Create a JSONArray to store expense objects
+                        JSONArray goalArray = new JSONArray();
+
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            Log.d("Expense Debg in for loop", String.valueOf(jsonObject.length()));
+
+
+                            String goalType = jsonObject.getString("goal_type") != null ? jsonObject.getString("goal_type"): "Extra";
+
+                            double amount =  0.0;
+                            if(jsonObject.get("amount_goal") instanceof Integer){
+                                amount = jsonObject.getDouble("amount_goal");
+                            } else if (jsonObject.get("amount_goal") instanceof String) {
+                                amount = 0.00;
+                            }
+
+
+                            JSONObject expenseObject = new JSONObject();
+                            expenseObject.put("goal_type", goalType);
+                            expenseObject.put("amount_goal", amount);
+
+                            goalArray.put(expenseObject);
+
+//                            total_goals += amount;
+                        }
+                        Log.d("GaolsArray", " " + goalArray.toString());
+                        Utilities.writeToInternalStorage(getActivity(),"goals.txt", goalArray.toString());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getActivity(), "Unable to connect.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
 
     public static int dpToPx(Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
-
 }
