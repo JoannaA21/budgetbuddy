@@ -211,7 +211,7 @@ public class dashboard_Fragment extends Fragment {
                     //goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS"+"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
                 }else{
                     double over = ((total_income - total_Expenses) - total_goals) * -1;
-                    goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET");
+                    goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET" + "\n" + "YOUR MONTHLY SAVINGS GOAL SHOULD BE " + total_goals);
                    // goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET" +"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
                     goalInfoText.setTextColor(Color.RED);
 
