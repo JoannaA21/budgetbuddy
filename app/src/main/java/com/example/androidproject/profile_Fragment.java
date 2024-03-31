@@ -50,6 +50,7 @@ public class profile_Fragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
     public profile_Fragment() {
         // Required empty public constructor
     }
@@ -110,9 +111,9 @@ public class profile_Fragment extends Fragment {
 //        new GoalsRequestAsynTask().execute("http://143.198.237.154:3001/api/getusergoal/" + id);
         GoalsRequestAsynTask readTask = new GoalsRequestAsynTask();
         readTask.execute("http://143.198.237.154:3001/api/getuserincome/" + id);
-        if (isFileExists("profile.txt")){
+        if (isFileExists("profilegoals.txt")){
             try{
-                JSONObject profilegoals = getInternalStorage("profile.txt");
+                JSONObject profilegoals = getInternalStorage("profilegoals.txt");
                 Log.d("user", "info " + profilegoals.get("monthly_income"));
 
                 // get results from readTask
@@ -254,9 +255,9 @@ public class profile_Fragment extends Fragment {
                 // For example, you can parse the JSON response and update UI components
                 try {
                     JSONObject jsonResponse = new JSONObject(response); //result in JSON
-                    writeToInternalStorage("profile.txt", response); //Save result in String to the internal storage
+                    writeToInternalStorage("profilegoals.txt", response); //Save result in String to the internal storage
                     Toast.makeText(getActivity(), "Update Income Success.", Toast.LENGTH_SHORT).show();
-                    redirectWhenSuccessfulLogin();
+                    redirectToDashboard();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     // Handle JSON parsing error
@@ -282,8 +283,8 @@ public class profile_Fragment extends Fragment {
         }
 
 
-        public void redirectWhenSuccessfulLogin() {
-            Intent intent = new Intent(getActivity(), dashboardPageRoot.class);     //Change this to dashboard
+        public void redirectToDashboard() {
+            Intent intent = new Intent(getActivity(), dashboardPageRoot.class);
             startActivity(intent);
         }
     }
@@ -295,6 +296,7 @@ public class profile_Fragment extends Fragment {
     {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+
     }
 
     public boolean isFileExists(String fileName) {
@@ -400,7 +402,7 @@ public class profile_Fragment extends Fragment {
                             profile.put("current_balance", current_balance);
                         }
                         Log.d("JSONArray", " " + profile);
-                        writeToInternalStorage("profile.txt", profile.toString());
+                        writeToInternalStorage("profilegoals.txt", profile.toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -425,7 +427,9 @@ public class profile_Fragment extends Fragment {
         }
 
     }
-
 }
 
+
+
+//****************************Total Expense on the profile page is not reflecting after adding an expense
 
