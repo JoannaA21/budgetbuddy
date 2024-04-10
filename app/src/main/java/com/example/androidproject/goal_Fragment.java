@@ -210,7 +210,7 @@ public class goal_Fragment extends Fragment {
                 Log.d("goal_type", "goal_type: " + goal_type);
 
                 goalType.setText(goal_type);
-                goalAmount.setText(amount_goal);
+                goalAmount.setText("$" + amount_goal);
                 if (!goal_type.isEmpty()) {
                     setGoalButton.setText("Update Goal");
                 }
