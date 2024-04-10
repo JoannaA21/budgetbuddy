@@ -51,6 +51,8 @@ public class profile_Fragment extends Fragment {
     private String mParam2;
     TextView user_fullName, user_Email, profile_monthlyIncome;
     TextView profile_allSavings, profile_expenses, profile_currentBalance;
+    Button logoutButton;
+
 
 
     public profile_Fragment() {
@@ -85,6 +87,16 @@ public class profile_Fragment extends Fragment {
         profile_allSavings = view.findViewById(R.id.profile_allSavings);
         profile_expenses = view.findViewById(R.id.profile_expenses);
         profile_currentBalance = view.findViewById(R.id.profile_currentBalance);
+        logoutButton = view.findViewById(R.id.logout);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent intent = new Intent(getActivity(), loginPage.class);
+               startActivity(intent);
+            }
+        });
+
         String id = null;
 
         if (getArguments() != null) {
@@ -433,6 +445,8 @@ public class profile_Fragment extends Fragment {
         }
 
     }
+
+
 }
 
 
