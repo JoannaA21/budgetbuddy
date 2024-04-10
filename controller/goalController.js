@@ -1,5 +1,6 @@
 const Goal = require('../models/goal');
 const { Sequelize, Op } = require('sequelize');
+const Income = require('../models/income');
 
 const timeElapsed = Date.now();
 const today = new Date(timeElapsed);
@@ -7,7 +8,6 @@ const today = new Date(timeElapsed);
 // Create goal (post)
 const createGoal = async(req, res, next) => {
     const {user_id, amount_goal, goal_type} = req.body;
-
     try {
 
         // created_at = today.toISOString();
@@ -47,6 +47,35 @@ const createGoal = async(req, res, next) => {
         } else {
             console.log('New record created:', goal);
         }  
+
+        const [incomeGoal, incomeCreated] = await Income.findOrCreate({
+            where: { user_id: user_id }, // Conditions to find the record
+            defaults: { // Data to be used if no matching record is found
+                user_id: user_id,
+                monthly_income: 0,
+                all_savings: amount_goal,
+                current_balance: 0,
+                expenses: 0,
+                created_at: today.toISOString(),
+                updated_at: today.toISOString()
+            }
+        });
+        
+        // If the record was found and updated, log the message
+        if (!incomeCreated) {
+            console.log('Existing record updated:', incomeGoal);
+            // Update the value of the current_balance field in the incomeGoal object
+            console.log(incomeGoal.monthly_income);
+            console.log(incomeGoal.all_savings);
+            // incomeGoal.monthly_income = parseFloat(monthly_income);
+            incomeGoal.all_savings = amount_goal;
+            incomeGoal.current_balance = parseFloat(incomeGoal.monthly_income -  incomeGoal.expenses) -  parseFloat(amount_goal);
+  
+            // Save the changes to the database
+            await incomeGoal.save();
+        } else {
+            console.log('New record created:', incomeGoal);
+        }      
 
         res.status(201).json(goal);
     } catch (err) {
