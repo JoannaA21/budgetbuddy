@@ -94,9 +94,31 @@ public class expense_Fragment extends Fragment {
             public void onClick(View v) {
 
                 if (validation()) {
-                    // Execute AsyncTask to send registration request
-                    AddExpenseRequestAsyncTask readTask = new AddExpenseRequestAsyncTask();
-                    readTask.execute("http://143.198.237.154:3001/api/createexpense");
+                    Log.d("input_expenseType", "input_expenseType: " +input_expenseType.getText().toString());
+
+                    //access id of user from credential.txt in the internal storage
+                    JSONObject credentialIS = getInternalStorage("credential.txt");
+                    JSONObject retrieve = null;
+                    try {
+                        retrieve = credentialIS.getJSONObject("details");
+                        String id = retrieve.getString("id");
+
+                        //Retrieve user input
+                        String expense_type = input_expenseType.getText().toString();
+                        String cost = input_cost.getText().toString().trim();
+
+                        //JSON object for user input
+                        JSONObject expenseInfo = new JSONObject();
+
+                        expenseInfo.put("expense_type", expense_type);
+                        expenseInfo.put("cost", cost);
+                        expenseInfo.put("user_id", id);
+                        // Execute AsyncTask to send registration request
+                        AddExpenseRequestAsyncTask readTask = new AddExpenseRequestAsyncTask();
+                        readTask.execute(expenseInfo);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
 
                     input_expenseType.setText("");
                     input_cost.setText("");
@@ -119,7 +141,7 @@ public class expense_Fragment extends Fragment {
     }
 
     private boolean validation() {
-        String expense_type = input_expenseType.getText().toString().trim();
+        String expense_type = input_expenseType.getText().toString();
         String cost = input_cost.getText().toString().trim();
 
         if (TextUtils.isEmpty(expense_type)) {
@@ -142,33 +164,20 @@ public class expense_Fragment extends Fragment {
         return inflater.inflate(R.layout.fragment_expense_, container, false);
     }
 
-    protected class AddExpenseRequestAsyncTask extends AsyncTask<String, Void, String> {
+    protected class AddExpenseRequestAsyncTask extends AsyncTask<JSONObject, Void, String> {
 
         @Override
-        protected String doInBackground(String... urls) {
+        protected String doInBackground(JSONObject... jsonObjects) {
 
             HttpURLConnection urlConnection = null;
             String response = null;
 
             try{
-                //access id of user from credential.txt in the internal storage
-                JSONObject credentialIS = getInternalStorage("credential.txt");
-                JSONObject retrieve = credentialIS.getJSONObject("details");
-                String id = retrieve.getString("id");
-
-                //Retrieve user input
-                String expense_type = input_expenseType.getText().toString().trim();
-                String cost = input_cost.getText().toString().trim();
-
-                //JSON object for user input
-                JSONObject expenseInfo = new JSONObject();
-
-                expenseInfo.put("expense_type", expense_type);
-                expenseInfo.put("cost", cost);
-                expenseInfo.put("user_id", id);
+                // Get the JSONObject from the parameters
+                JSONObject expenseInfo = jsonObjects[0];
 
                 //Create connection and send request
-                URL url = new URL(urls[0]);
+                URL url = new URL("http://143.198.237.154:3001/api/createexpense");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true); // Allow writing data to the connection
@@ -203,7 +212,7 @@ public class expense_Fragment extends Fragment {
                 }
 
 
-            } catch (IOException | JSONException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 response = "Exception: " + e.getMessage();
             }

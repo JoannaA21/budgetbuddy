@@ -49,6 +49,8 @@ public class profile_Fragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    TextView user_fullName, user_Email, profile_monthlyIncome;
+    TextView profile_allSavings, profile_expenses, profile_currentBalance;
 
 
     public profile_Fragment() {
@@ -77,8 +79,6 @@ public class profile_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView user_fullName, user_Email, profile_monthlyIncome;
-        TextView profile_allSavings, profile_expenses, profile_currentBalance;
         user_fullName = view.findViewById(R.id.user_fullName);
         user_Email = view.findViewById(R.id.user_Email);
         profile_monthlyIncome = view.findViewById(R.id.profile_monthlyIncome);
@@ -400,6 +400,12 @@ public class profile_Fragment extends Fragment {
                             profile.put("all_savings", all_savings);
                             profile.put("expenses", expenses);
                             profile.put("current_balance", current_balance);
+
+                            // add text to profile
+                            profile_monthlyIncome.setText("$ " + profile.get("monthly_income"));
+                            profile_allSavings.setText("$ " + profile.get("all_savings"));
+                            profile_expenses.setText("$ " + profile.get("expenses"));
+                            profile_currentBalance.setText("$ " + profile.get("current_balance"));
                         }
                         Log.d("JSONArray", " " + profile);
                         writeToInternalStorage("profilegoals.txt", profile.toString());

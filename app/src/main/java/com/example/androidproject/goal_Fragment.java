@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -28,6 +29,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -52,6 +54,7 @@ public class goal_Fragment extends Fragment {
 
     EditText input_amountGoal, input_goalType;
     Button setGoalButton;
+    TextView goalType, goalAmount;
 
     public goal_Fragment() {
         // Required empty public constructor
@@ -82,6 +85,8 @@ public class goal_Fragment extends Fragment {
         input_amountGoal = view.findViewById(R.id.input_amountGoal);
         input_goalType = view.findViewById(R.id.input_goalType);
         setGoalButton = view.findViewById(R.id.btn_setGoal);
+        goalType = view.findViewById(R.id.currentGoalType);
+        goalAmount = view.findViewById(R.id.currentGoalAmount);
 
 
         if (getArguments() != null) {
@@ -90,6 +95,8 @@ public class goal_Fragment extends Fragment {
         }
 
 
+        GetGoalRequestAsyncTask getTask = new GetGoalRequestAsyncTask();
+        getTask.execute();
         setGoalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +138,86 @@ public class goal_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_goal_, container, false);
+    }
+
+    // call goal api and render to currentGoalType and currentGoalAmount
+    protected class GetGoalRequestAsyncTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null; //reads file line by line
+            String response = null;
+
+            try{
+                //access id of user from credential.txt in the internal storage
+                JSONObject credentialIS = getInternalStorage("credential.txt");
+                JSONObject retrieve = credentialIS.getJSONObject("details");
+                String id = retrieve.getString("id");
+                //Create connection and send request
+                URL url = new URL("http://143.198.237.154:3001/api/getusergoal/" + id);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                InputStream inputStream = connection.getInputStream(); //read file
+                StringBuilder buffer = new StringBuilder();
+
+                if (inputStream == null) {
+                    // Return null to indicate failure
+                    return null;
+                }
+
+                //BufferReader reads JSON file from url
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line).append("\n");
+                }
+
+                response = buffer.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Return null to indicate failure
+                return null;
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect(); //free up connection
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            // Process the result
+            try {
+                JSONObject jsonObject = new JSONObject(result); // jsonString is your JSON response
+                // Now you can access data from jsonObject
+                String goal_type = jsonObject.optString("goal_type", "");
+                String amount_goal = jsonObject.optString("amount_goal", "");
+                Log.d("goal_type", "goal_type: " + goal_type);
+
+                goalType.setText(goal_type);
+                goalAmount.setText(amount_goal);
+                if (!goal_type.isEmpty()) {
+                    setGoalButton.setText("Update Goal");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     protected class SetGoalRequestAsyncTask extends AsyncTask<String, Void, String> {
