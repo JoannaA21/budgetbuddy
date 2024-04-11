@@ -106,8 +106,7 @@ public class goal_Fragment extends Fragment {
                     SetGoalRequestAsyncTask readTask = new SetGoalRequestAsyncTask();
                     readTask.execute("http://143.198.237.154:3001/api/creategoal");
 
-                    input_amountGoal.setText("");
-                    input_goalType.setText("");
+
                     redirectToDashboard();
                 }
             }
@@ -241,6 +240,8 @@ public class goal_Fragment extends Fragment {
                 //JSON object for user input
                 JSONObject expenseInfo = new JSONObject();
 
+
+                Log.d("This is the Goal Bud", "This is the Goal Amount:" + goalamount);
                 expenseInfo.put("goal_type", goal_type);
                 expenseInfo.put("amount_goal", goalamount);
                 expenseInfo.put("user_id", id);
@@ -291,6 +292,9 @@ public class goal_Fragment extends Fragment {
 
 
         protected void onPostExecute(String result) {
+
+            input_amountGoal.setText("");
+            input_goalType.setText("");
 
             if(result != null) {
                 Toast.makeText(getContext(), "Set Goal successfully", Toast.LENGTH_SHORT).show();

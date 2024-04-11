@@ -44,7 +44,7 @@ public class loginPage extends AppCompatActivity {
             }
         });
 
-        //redirectWhenSuccessfulLogin();
+       // redirectWhenSuccessfulLogin();
     }
 
 

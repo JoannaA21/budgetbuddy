@@ -146,10 +146,10 @@ public class profile_Fragment extends Fragment {
         if (isFileExists("profilegoals.txt")){
             try{
                 JSONObject profilegoals = getInternalStorage("profilegoals.txt");
-                Log.d("user", "info " + profilegoals.get("monthly_income"));
+            //    Log.d("user", "info " + profilegoals.get("monthly_income"));
 
                 // get results from readTask
-                Log.d("info","info " + readTask);
+           //     Log.d("info","info " + readTask);
 
                 // add text to profile
                 profile_monthlyIncome.setText("$ " + profilegoals.get("monthly_income"));

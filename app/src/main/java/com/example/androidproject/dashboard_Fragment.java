@@ -124,8 +124,6 @@ public class dashboard_Fragment extends Fragment {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
 
-
-
         //For- after login
         try {
             JSONObject credentialIS = Utilities.getInternalStorage(getActivity(),"credential.txt");
@@ -140,18 +138,73 @@ public class dashboard_Fragment extends Fragment {
 
         GetExpenseRequestAsynTask readExpenseTask = new GetExpenseRequestAsynTask();
         readExpenseTask.execute("http://143.198.237.154:3001/api/getuserexpense/" + id);
-
-        GetSavingsRequestAsynTask readSavingsTask = new GetSavingsRequestAsynTask();
-        readSavingsTask.execute("http://143.198.237.154:3001/api/getuserincome/" + id);
-
+//
         GetGoalsRequestAsynTask readGoalsTask = new GetGoalsRequestAsynTask();
         readGoalsTask.execute("http://143.198.237.154:3001/api/getusergoal/" + id);
+//
+        GetSavingsRequestAsynTask readTask = new GetSavingsRequestAsynTask();
+        readTask.execute("http://143.198.237.154:3001/api/getuserincome/" + id);
+
+        if (Utilities.isFileExists(getActivity(),"profileInfo.txt")){
+            try{
+                JSONObject profilegoals = Utilities.getInternalStorage(getActivity(),"profileInfo.txt");
+
+                double savings = profilegoals.getInt("current_balance");
+                total_income = profilegoals.getDouble("monthly_income");
+
+                row = addDataToTable("Current Savings", savings, "savings");
+                tableLayout.addView(row);
+
+            }catch (JSONException e){
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (Utilities.isFileExists(getActivity(),"goals.txt")) {
+            String jsonString = String.valueOf(Utilities.getJSONArrayFromInternalStorage(getActivity(),"goals.txt"));
+
+            Log.d("This is the goals", jsonString);
+
+            try {
+                JSONArray goalsArray = new JSONArray(jsonString);
+                row = addDataToTable("      TARGET SAVINGS",0.0,"");
+                tableLayout.addView(row);
+
+                for (int i = 0; i < goalsArray.length(); i++) {
+                    JSONObject goalObject = goalsArray.getJSONObject(i);
+                    // Extract goal_type and amount from each goals object
+                    String goalType =  goalObject.getString("goal_type");
+                    double amount = goalObject.getDouble("amount_goal");
+
+                    total_goals += amount;
+                    row = addDataToTable(goalType, total_goals, "goals");
+                    tableLayout.addView(row);
+                }
+
+                if((total_income - total_Expenses) > total_goals){
+                    goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS ");
+                    goalInfoText.setTextColor(Color.parseColor("#157811"));
+                    //goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS"+"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
+                }else{
+                    double over = ((total_income - total_Expenses) - total_goals) * -1;
+                    goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET" + "\n" + "YOUR MONTHLY SAVINGS GOAL SHOULD BE " + total_goals);
+                    // goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET" +"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
+                    goalInfoText.setTextColor(Color.parseColor("#db0c26"));
+                    Log.d("Expense", "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         // Check if the expenses file exists
         if (Utilities.isFileExists(getActivity(),"expenses.txt")) {
            // Log.d("Debug", "There is expenses.txt");
             String jsonString = String.valueOf(Utilities.getJSONArrayFromInternalStorage(getActivity(),"expenses.txt"));
             //Log.d("JSON Content", "Content from file: " + jsonString);
+            row = addDataToTable("      EXPENSES",0.0,"");
+            tableLayout.addView(row);
 
             try {
                 JSONArray expensesArray = new JSONArray(jsonString);
@@ -174,58 +227,10 @@ public class dashboard_Fragment extends Fragment {
         }
 
 
-        if (Utilities.isFileExists(getActivity(),"savings.txt")){
-            try{
-                JSONObject data = Utilities.getInternalStorage(getActivity(),"savings.txt");
-                //Log.d("user", "info " + data.get("monthly_income"));
-
-                String expenseType = "Savings";
-                double monthlyIncomeValue = data.getDouble("monthly_income");
-//                double monthlyGoalValue = data.getDouble("monthly_goal");
-//                double monthlyIncomeValue = data.getDouble("monthly_income");
-                double cost = monthlyIncomeValue - total_Expenses;
-                entries.add(new PieEntry((float) cost, expenseType));
-                row = addDataToTable(expenseType, cost, "savings");
-                tableLayout.addView(row);
-                total_income = monthlyIncomeValue;
-            }catch (JSONException e){
-                throw new RuntimeException(e);
-            }
-        }
-
-        if (Utilities.isFileExists(getActivity(),"goals.txt")) {
-            String jsonString = String.valueOf(Utilities.getJSONArrayFromInternalStorage(getActivity(),"goals.txt"));
-
-            try {
-                JSONArray goalsArray = new JSONArray(jsonString);
-                for (int i = 0; i < goalsArray.length(); i++) {
-                    JSONObject goalObject = goalsArray.getJSONObject(i);
-                    // Extract goal_type and amount from each goals object
-                    String goalType =  goalObject.getString("goal_type");
-                    double amount = goalObject.getDouble("amount_goal");
-                    total_goals += amount;
-                }
-
-                if((total_income - total_Expenses) > total_goals){
-                    goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS");
-                    //goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS"+"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
-                }else{
-                    double over = ((total_income - total_Expenses) - total_goals) * -1;
-                    goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET" + "\n" + "YOUR MONTHLY SAVINGS GOAL SHOULD BE " + total_goals);
-                   // goalInfoText.setText("YOU ARE " + over + " OVER THE BUDGET" +"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
-                    goalInfoText.setTextColor(Color.RED);
-
-                    Log.d("Expense", "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);
-                }
 
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
 
-
-        PieDataSet pieDataSet = new PieDataSet(entries, "Budget");
+        PieDataSet pieDataSet = new PieDataSet(entries,"");
         pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
         PieData pieData = new PieData(pieDataSet);
@@ -276,7 +281,8 @@ public class dashboard_Fragment extends Fragment {
         expenseTypeTextView.setText(expense_type);
         expenseTypeTextView.setHeight(dpToPx(getContext(), 50));
         expenseTypeTextView.setWidth(dpToPx(getContext(), 180));
-        expenseTypeTextView.setBackgroundColor(Objects.equals(type, "expense") ?Color.parseColor("#239B90"): Color.parseColor("#2ab05d"));
+        expenseTypeTextView.setTextColor(Objects.equals(type, "") ?Color.BLACK: Color.WHITE);
+        expenseTypeTextView.setBackgroundColor(Objects.equals(type, "expense") ?Color.parseColor("#af5852"):Objects.equals(type, "savings") ? Color.parseColor("#168118"):Objects.equals(type, "goals") ? Color.parseColor("#008b8b"): Color.parseColor("#FFFFFF"));
         expenseTypeTextView.setPadding(dpToPx(getContext(), 10), dpToPx(getContext(), 5), dpToPx(getContext(), 10), dpToPx(getContext(), 5));
         expenseTypeTextView.setTextSize(16);
         expenseTypeTextView.setTypeface(null, Typeface.BOLD);
@@ -290,8 +296,8 @@ public class dashboard_Fragment extends Fragment {
                 TableRow.LayoutParams.WRAP_CONTENT
         ));
 
-        expenseCostTextView.setText(String.valueOf(cost));
-        expenseCostTextView.setTextColor(Objects.equals(type, "expense") ?Color.BLACK: Color.parseColor("#2ab05d"));
+        expenseCostTextView.setText(cost != 0.0 ? String.valueOf(cost): "");
+        expenseCostTextView.setTextColor(Objects.equals(type, "expense") ?Color.BLACK: Color.parseColor("#157811"));
         expenseCostTextView.setPadding(dpToPx(getContext(), 15), dpToPx(getContext(), 10), dpToPx(getContext(), 10), dpToPx(getContext(), 5));
         expenseCostTextView.setTextSize(22);
         expenseCostTextView.setTypeface(null, Typeface.BOLD_ITALIC);
@@ -406,16 +412,19 @@ public class dashboard_Fragment extends Fragment {
                             profile.put("current_balance", current_balance);
                         }
                         Log.d("JSONArray", " " + profile);
-                        Utilities.writeToInternalStorage(getActivity(),"savings.txt", profile.toString());
+                        Utilities.writeToInternalStorage(getActivity(),"profileInfo.txt", profile.toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    // Handle JSON parsing error
                 }
             } else {
                 // Show error message or handle null response here
                 Toast.makeText(getActivity(), "Unable to connect.", Toast.LENGTH_SHORT).show();
             }
         }
+
+
     }
 
 
@@ -439,44 +448,62 @@ public class dashboard_Fragment extends Fragment {
                         // If it's an array, parse it as a JSONArray
                         JSONArray jsonArray = new JSONArray(jsonData);
 
-                        // Create a JSONArray to store expense objects
+                        // Create a JSONArray to store the goal objects
                         JSONArray goalArray = new JSONArray();
 
-
+                        // Iterate over the elements of the JSONArray
                         for (int i = 0; i < jsonArray.length(); i++) {
+                            // Get the JSONObject at index i
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            Log.d("Expense Debg in for loop", String.valueOf(jsonObject.length()));
 
+                            // Extract relevant data from the JSONObject
+                            String goalType = jsonObject.getString("goal_type");
+                            double amount = jsonObject.getDouble("amount_goal");
 
-                            String goalType = jsonObject.getString("goal_type") != null ? jsonObject.getString("goal_type"): "Extra";
+                            // Create a JSONObject to store the goal data
+                            JSONObject goalObject = new JSONObject();
+                            goalObject.put("goal_type", goalType);
+                            goalObject.put("amount_goal", amount);
 
-                            double amount =  0.0;
-                            if(jsonObject.get("amount_goal") instanceof Integer){
-                                amount = jsonObject.getDouble("amount_goal");
-                            } else if (jsonObject.get("amount_goal") instanceof String) {
-                                amount = 0.00;
-                            }
-
-
-                            JSONObject expenseObject = new JSONObject();
-                            expenseObject.put("goal_type", goalType);
-                            expenseObject.put("amount_goal", amount);
-
-                            goalArray.put(expenseObject);
-
-//                            total_goals += amount;
+                            // Add the goalObject to the goalArray
+                            goalArray.put(goalObject);
                         }
-                        Log.d("GaolsArray", " " + goalArray.toString());
-                        Utilities.writeToInternalStorage(getActivity(),"goals.txt", goalArray.toString());
+
+                        // Log the goals array for debugging
+                        Log.d("GoalsArray", goalArray.toString());
+
+                        // Write the goals array to internal storage
+                        Utilities.writeToInternalStorage(getActivity(), "goals.txt", goalArray.toString());
+                    } else {
+                        // If it's not an array, it's a JSONObject
+                        // Parse the JSON response as a JSONObject
+                        JSONObject jsonResponse = new JSONObject(jsonData);
+
+                        // Extract relevant data from the JSONObject
+                        String goalType = jsonResponse.getString("goal_type");
+                        double amount = jsonResponse.getDouble("amount_goal");
+
+                        // Create a JSONArray to store the goal object
+                        JSONArray goalArray = new JSONArray();
+                        JSONObject goalObject = new JSONObject();
+                        goalObject.put("goal_type", goalType);
+                        goalObject.put("amount_goal", amount);
+                        goalArray.put(goalObject);
+
+                        // Log the goals array for debugging
+                        Log.d("GoalsArray", goalArray.toString());
+
+                        // Write the goals array to internal storage
+                        Utilities.writeToInternalStorage(getActivity(), "goals.txt", goalArray.toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else {
+                // Show error message if response is null
                 Toast.makeText(getActivity(), "Unable to connect.", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
 

@@ -120,7 +120,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center|start"
-                    android:text="All Savings"
+                    android:text="Target Savings"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 

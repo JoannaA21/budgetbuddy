@@ -46,7 +46,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="center"
-                android:text="Amount Goal"
+                android:text="Goal Amount"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -80,7 +80,7 @@
                 android:id="@+id/input_goalType"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:hint="Goal Type" />
+                android:hint="Goal Name" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -92,7 +92,7 @@
                 android:id="@+id/input_amountGoal"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:hint="Amount Goal"
+                android:hint="Goal Amount"
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 

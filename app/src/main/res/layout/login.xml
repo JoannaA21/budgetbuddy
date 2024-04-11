@@ -18,8 +18,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
+            android:layout_width="438dp"
             android:layout_height="162dp"
+            android:visibility="visible"
             tools:srcCompat="@drawable/handshake" />
 
         <TextView
