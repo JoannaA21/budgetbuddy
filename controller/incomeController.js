@@ -49,7 +49,8 @@ const createIncome = async(req, res, next) => {
           console.log('Existing record updated:', incomeGoal);
           // Update the value of the current_balance field in the incomeGoal object
           incomeGoal.monthly_income = parseFloat(monthly_income);
-          incomeGoal.current_balance = parseFloat(monthly_income -  cost) -  parseFloat(amount_goal);
+          // incomeGoal.current_balance = parseFloat(monthly_income -  cost) -  parseFloat(amount_goal);
+          incomeGoal.current_balance = parseFloat(monthly_income -  cost);
 
           // Save the changes to the database
           await incomeGoal.save();

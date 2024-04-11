@@ -69,7 +69,8 @@ const createGoal = async(req, res, next) => {
             console.log(incomeGoal.all_savings);
             // incomeGoal.monthly_income = parseFloat(monthly_income);
             incomeGoal.all_savings = amount_goal;
-            incomeGoal.current_balance = parseFloat(incomeGoal.monthly_income -  incomeGoal.expenses) -  parseFloat(amount_goal);
+            // incomeGoal.current_balance = parseFloat(incomeGoal.monthly_income -  incomeGoal.expenses) -  parseFloat(amount_goal);
+            incomeGoal.current_balance = parseFloat(incomeGoal.monthly_income -  incomeGoal.expenses);
   
             // Save the changes to the database
             await incomeGoal.save();
