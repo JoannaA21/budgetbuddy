@@ -96,30 +96,22 @@ public class profile_Fragment extends Fragment {
 
                 if (isFileExists("credential.txt")) {
                     try {
-                        // Get the file path
                         File fileToDelete = new File(getActivity().getFilesDir(), "credential.txt");
 
-                        // Delete the file
                         boolean isDeleted = fileToDelete.delete();
 
                         if (isDeleted) {
-                            // File deletion successful
                             Intent intent = new Intent(getActivity(), loginPage.class);
                             startActivity(intent);
                             Log.d("Logout", "Logout result:  File deletion successful");
                         } else {
-                            // File deletion failed
-                            // Handle failure scenario
                             Log.d("Logout", "Logout result: File deletion failed");
 
                         }
                     } catch (Exception e) {
-                        // Handle exception
                         e.printStackTrace();
                     }
                 } else {
-                    // File does not exist
-                    // Handle scenario where the file does not exist
                     Log.d("Logout", "Logout result: File does not exist");
                 }
             }
