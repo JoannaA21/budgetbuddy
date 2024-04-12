@@ -40,11 +40,10 @@ public class loginPage extends AppCompatActivity {
             public void onClick(View v) {
                 //Execute the PostRequestAsyncTask when the button is clicked
                 new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
-                redirectWhenSuccessfulLogin();
+//                redirectWhenSuccessfulLogin();
             }
         });
 
-       // redirectWhenSuccessfulLogin();
     }
 
 
@@ -113,6 +112,7 @@ public class loginPage extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            super.onPostExecute(result);
             // Handle the response here
             if (result != null) {
                 // Response received successfully, save info to Internal storage
@@ -135,14 +135,24 @@ public class loginPage extends AppCompatActivity {
 
         public void writeToInternalStorage(String fileName, String content) {
             File path = getApplicationContext().getFilesDir();
+            // Check if file exists
+            File file = new File(path, fileName);
 
             try {
+                // Check if file exists
+                if (!file.exists()) {
+                    // Create the file
+                    file.createNewFile();
+                }
+
+                // Write content to the file
                 FileOutputStream writer = new FileOutputStream(new File(path, fileName));
                 writer.write(content.getBytes());
+                writer.close();
                 Log.d("Internal Storage", "Credentials: " + content);
                 redirectWhenSuccessfulLogin();
-            }catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
