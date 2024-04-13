@@ -137,6 +137,7 @@ public class goal_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_goal_, container, false);
+
     }
 
     // call goal api and render to currentGoalType and currentGoalAmount
@@ -330,8 +331,3 @@ public class goal_Fragment extends Fragment {
     }
 
 }
-
-
-//*******************************************
-//Toast is not showing
-//We should display all the goals and its progress here so the page doesn't look empty

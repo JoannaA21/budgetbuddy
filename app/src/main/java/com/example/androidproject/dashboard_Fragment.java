@@ -181,7 +181,11 @@ public class dashboard_Fragment extends Fragment {
                     tableLayout.addView(row);
                 }
 
-                if((total_income - total_Expenses) > total_goals){
+                if(total_income == 0  && total_Expenses == 0 && total_goals ==0) {
+                    goalInfoText.setText("START TRACKING YOUR FINANCES BY SETTING UP YOUR INCOME, GOALS, AND BY ADDING YOUR EXPENSES");
+                    goalInfoText.setTextColor(Color.parseColor("#000000"));
+                }
+                else if((total_income - total_Expenses) > total_goals){
                     goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS ");
                     goalInfoText.setTextColor(Color.parseColor("#157811"));
                     //goalInfoText.setText("YOU ARE ON TRACK ON ACHIEVING YOUR MONTHLY SAVINGS"+"\n"+ "Total_Income: "+ total_income +  "Total_Expense: " + total_Expenses + "Total Goals: "+ total_goals);

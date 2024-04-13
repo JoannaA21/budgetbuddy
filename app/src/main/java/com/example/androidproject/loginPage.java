@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 import org.json.JSONException;
@@ -38,12 +40,14 @@ public class loginPage extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Execute the PostRequestAsyncTask when the button is clicked
-                new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
+
+                if(validateForm()) {
+                    //Execute the PostRequestAsyncTask when the button is clicked
+                    new ProfileRequestAsyncTask().execute("http://143.198.237.154:3001/api/login");
 //                redirectWhenSuccessfulLogin();
+                }
             }
         });
-
     }
 
 
@@ -99,6 +103,8 @@ public class loginPage extends AppCompatActivity {
                     response = responseBuilder.toString();
                 } else {
                     response = "POST request failed with response code: " + responseCode;
+                    TextView errorTextView = findViewById(R.id.errorTextView);
+                    errorTextView.setText("The email and/or password you entered are incorrect.");
                 }
 
                 // Close the connection
@@ -155,6 +161,23 @@ public class loginPage extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean validateForm() {
+        String email = editTextEmail.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+
+        // Validation for user input
+        if (TextUtils.isEmpty(email)) {
+            editTextEmail.setError("Email is required");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            editTextPassword.setError("Password is required");
+            return false;
+        }
+        return true;
     }
 
 

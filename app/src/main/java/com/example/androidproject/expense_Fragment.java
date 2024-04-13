@@ -1,5 +1,6 @@
 package com.example.androidproject;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -120,8 +121,10 @@ public class expense_Fragment extends Fragment {
                         throw new RuntimeException(e);
                     }
 
-                    input_expenseType.setText("");
-                    input_cost.setText("");
+//                    input_expenseType.setText("");
+//                    input_cost.setText("");
+                    redirectToDashboard();
+
                 }
             }
         });
@@ -253,8 +256,12 @@ public class expense_Fragment extends Fragment {
         File file = new File(path, fileName);
         return file.exists();
     }
+
+
+    public void redirectToDashboard() {
+        Intent intent = new Intent(getActivity(), dashboardPageRoot.class);     //Change this to dashboard
+        startActivity(intent);
+    }
 }
 
 
-
-//*********************** Current Balance should change when user adds a new expense. FIX!!!
