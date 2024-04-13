@@ -9,10 +9,11 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="315dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,7 +21,10 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="162dp"
+            android:adjustViewBounds="false"
+            android:cropToPadding="false"
             android:visibility="visible"
+            app:srcCompat="@drawable/handshake"
             tools:srcCompat="@drawable/handshake" />
 
         <TextView
@@ -36,8 +40,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="392dp"
-        android:layout_height="380dp"
+        android:layout_width="398dp"
+        android:layout_height="336dp"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="103dp"
         android:gravity="center"
