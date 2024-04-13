@@ -41,8 +41,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="398dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="103dp"
+        android:layout_height="0dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +52,7 @@
         <TextView
             android:id="@+id/errorTextView"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textAllCaps="false"
             android:textColor="#F40202"
@@ -67,20 +66,20 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:hint="Email" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
             android:padding="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
+                android:hint="Password"
                 android:inputType="text|textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +97,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
